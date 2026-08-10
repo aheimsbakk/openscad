@@ -5,12 +5,11 @@
 ```
 .
 ├── drawings/                      # OpenSCAD source files (kebab-case)
-│   └── structures/               # category: structures
-│       ├── isometric-grid-plate.scad
-│       └── isometric-support-grid.scad
+│   └── frames/                    # category: frames
+│       └── rod-cage.scad          # interlocking rod-based enclosure frame
 ├── previews/                      # Generated preview PNGs (mirrors drawings/)
-│   └── structures/               # category: structures
-│       └── isometric-grid-plate.png
+│   └── frames/
+│       └── rod-cage.png
 ├── scripts/                       # Build and utility scripts
 │   ├── render-one.sh              # Blueprint component: Render Script (single)
 │   ├── render-all.sh              # Blueprint component: Render Script (batch)
@@ -58,4 +57,4 @@
 
 | Name | Category | Source Path | Preview Path |
 |---|---|---|---|
-| Isometric Grid Plate | structures | drawings/structures/isometric-grid-plate.scad | previews/structures/isometric-grid-plate.png |
+| Rod Cage | frames | drawings/frames/rod-cage.scad | previews/frames/rod-cage.png |

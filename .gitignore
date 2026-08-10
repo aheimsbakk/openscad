@@ -1,5 +1,4 @@
 # Excludes build artifacts and generated files
-previews/
 *.stl
 *.deps
 *.param
