@@ -1,0 +1,9 @@
+# Excludes build artifacts and generated files
+previews/
+*.stl
+*.deps
+*.param
+.env
+.venv/
+venv/
+.DS_Store
