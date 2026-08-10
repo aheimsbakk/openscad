@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.2] - 2026-08-10
+
+- **why:** Combine `frame_cap` and `foil_cap` into a single `cap` module
+- **model:** kompis/qwen-3.6-think-coding-mtp
+- **tags:** openscad, refactor, deduplication
+
+### Changed
+
+- Replaced `frame_cap` and `foil_cap` modules with single `cap(size, peg_d, peg_l, peg_tip_d=0)`
+- `peg_tip_d=0` produces straight pegs (frame cap); `peg_tip_d>0` produces tapered pegs (foil cap)
+- Updated instantiation calls and header comments to use `cap`
+
 ## [0.1.1] - 2026-08-10
 
 - **why:** Improve code readability and documentation for the enclosure parts system

@@ -1,16 +1,16 @@
 // Enclosure parts connector system
-// Purpose: Modular interlocking pieces for building a rectangular frame
-// that wraps plastic foil. Pieces connect via pegs and holes in a 3D grid,
-// held together by a 6mm hollow aluminum rod running through the center of
-// each piece.
+// Purpose: Modular frame for a 3D printer dust cover. Interlocking parts
+// slide onto a 6mm aluminum rod and snap together via peg-and-hole joints,
+// creating a rectangular enclosure that wraps with plastic foil to protect
+// the printer from dust when not in use.
 //
 // Assembly:
 // 1. Cut the aluminum rod to the desired frame length.
 // 2. Slide grid_nodes onto the rod in your desired layout.
 // 3. Push adjacent pieces together so the pegs of one engage the holes of
 //    the next. Pegs have 0.2mm clearance for easy assembly.
-// 4. Cap the frame ends with frame_caps (solid disc, aesthetic) or
-//    foil_caps (disc with tapered pegs, for wrapping foil through).
+// 4. Cap the frame ends with a cap — straight pegs for aesthetic ends,
+//    or tapered pegs for wrapping foil through.
 // 5. Use rod_anchors at corners or frame ends to secure the rod and
 //    transfer load into the grid.
 // 6. Place a spacer between two grid_nodes on the same rod to create a
@@ -20,8 +20,8 @@
 //   grid_node (hollow) — main interlocking cube with rod hole
 //   grid_node (solid)  — same shape, no rod hole for edge positions
 //   rod_anchor         — tapered cylinder, anchors the rod
-//   frame_cap          — solid disc, aesthetic end cap
-//   foil_cap           — disc with tapered pegs, leaves gap for foil
+//   cap (straight)     — solid disc, aesthetic end cap
+//   cap (tapered)      — disc with tapered pegs, leaves gap for foil
 //   spacer             — thin ring, reduces friction between stacked pieces
 //
 // Peg variants:
@@ -126,19 +126,10 @@ module rod_anchor(size = node_size, rod_hole_d = rod_hole_d, peg_d = peg_d, peg_
     }
 }
 
-module frame_cap(size = node_size, peg_d = peg_d, peg_l = peg_l) {
-    // Flat disc with straight pegs. Sits flush against the grid_node.
-    // Use for aesthetic end caps where no foil needs to be fastened.
-    cylinder(size / 8, d = size, center = true);
-    translate([0, 0, peg_l / 2 + size / 2]) {
-        small_pegs(size, peg_d, peg_l);
-    }
-}
-
-module foil_cap(size = node_size, peg_d = peg_d, peg_l = peg_l, peg_tip_d = peg_d / 1.5) {
-    // Flat disc with tapered pegs. The taper creates a gap between the
-    // disc and the grid_node so plastic foil can be tucked in.
-    // peg_tip_d controls the gap size — smaller taper = larger gap.
+module cap(size = node_size, peg_d = peg_d, peg_l = peg_l, peg_tip_d = 0) {
+    // Flat disc with pegs on the outer face.
+    // peg_tip_d = 0  → straight pegs (frame cap, flush fit)
+    // peg_tip_d > 0  → tapered pegs (foil cap, creates gap for foil)
     cylinder(size / 8, d = size, center = true);
     translate([0, 0, peg_l / 2 + size / 2]) {
         small_pegs(size, peg_d, peg_l, peg_tip_d);
@@ -173,14 +164,14 @@ translate([node_size * 1.5, 0, 0]) {
     }
 }
 
-// Top: frame cap (solid disc, aesthetic end cap)
+// Top: frame cap (straight pegs, flush fit)
 translate([0, node_size * 1.5, 0]) {
-    frame_cap(node_size, peg_d, peg_l);
+    cap(node_size, peg_d, peg_l);
 }
 
 // Top-right: foil cap (tapered pegs, leaves gap for plastic foil)
 translate([node_size * 1.5, node_size * 1.5, 0]) {
-    foil_cap(node_size, peg_d, peg_l);
+    cap(node_size, peg_d, peg_l, peg_d / 1.5);
 }
 
 // Top-left: spacer (thin ring, reduces friction between stacked pieces)
