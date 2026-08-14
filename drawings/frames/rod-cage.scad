@@ -37,7 +37,9 @@ peg_d = 4;
 peg_l = node_size / 8;
 
 // Clearance between pegs and holes (0.2mm for easy assembly)
-clearance = 0.2;
+clearance_rod = 0.2;
+clearance_aditional = 0.05;
+clearance_peg = 0.05;
 
 // Render resolution
 $fs = 0.1;  // Minimum facet size (nozzle)
@@ -92,7 +94,7 @@ module grid_node(size = node_size, rod_hole_d = rod_hole_d, peg_d = peg_d, peg_l
 
         // Central hole for aluminum rod
         if (hollow) {
-            cylinder(size, d = rod_hole_d, center = true);
+            cylinder(size, d = rod_hole_d + clearance_aditional, center = true);
         }
 
         // Holes on each face for mating pegs
@@ -119,7 +121,7 @@ module rod_anchor(size = node_size, rod_hole_d = rod_hole_d, peg_d = peg_d, peg_
     taper_ratio = 1.5;
     difference() {
         cylinder(size / 2, d1 = size, d2 = size / taper_ratio, center = true);
-        cylinder(size / 2, d = rod_hole_d, center = true);
+        cylinder(size / 2, d = rod_hole_d + clearance_aditional, center = true);
     }
     translate([0, 0, size / 4 - peg_l]) {
         small_pegs(size, peg_d);
@@ -140,27 +142,27 @@ module spacer(size = node_size, rod_hole_d = rod_hole_d) {
     // Thin ring with central hole. Placed between two grid_nodes on the
     // same rod to create a small gap that reduces friction and allows
     // one node to pivot relative to the other — useful for hinged doors.
-    ring_ratio = 1.66;
+    ring_ratio = 1.5;
     difference() {
         cylinder(size / 16, d = size / ring_ratio, center = true);
-        cylinder(size / 16, d = rod_hole_d, center = true);
+        cylinder(size / 16, d = rod_hole_d + clearance_aditional + clearance_aditional, center = true);
     }
 }
 
 // ================= INSTANTIATION =================
 
 // Center: hollow grid node (main frame intersection)
-grid_node(node_size, rod_hole_d + clearance, peg_d + clearance, peg_l + clearance);
+grid_node(node_size, rod_hole_d + clearance_rod, peg_d + clearance_peg, peg_l + clearance_rod);
 
 // Left: solid grid node (no rod hole, for edge positions)
 translate([-node_size * 1.5, 0, 0]) {
-    grid_node(node_size, rod_hole_d + clearance, peg_d + clearance, peg_l + clearance, false);
+    grid_node(node_size, rod_hole_d + clearance_rod, peg_d + clearance_peg, peg_l + clearance_rod, false);
 }
 
 // Right: rod anchor (secures the aluminum rod at a corner)
 translate([node_size * 1.5, 0, 0]) {
     rotate([180]) {
-        rod_anchor(node_size, rod_hole_d + clearance, peg_d, peg_l);
+        rod_anchor(node_size, rod_hole_d + clearance_rod + clearance_aditional, peg_d, peg_l);
     }
 }
 
@@ -170,9 +172,9 @@ translate([0, node_size * 1.5, 0]) {
 }
 
 // Top-right: foil cap (tapered pegs, leaves gap for plastic foil)
-translate([node_size * 1.5, node_size * 1.5, 0]) {
-    cap(node_size, peg_d, peg_l, peg_d / 1.5);
-}
+//translate([node_size * 1.5, node_size * 1.5, 0]) {
+//    cap(node_size, peg_d, peg_l, peg_d / 1.5);
+//}
 
 // Top-left: spacer (thin ring, reduces friction between stacked pieces)
 translate([-node_size * 1.5, node_size * 1.5, 0]) {

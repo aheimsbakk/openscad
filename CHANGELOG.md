@@ -1,16 +1,18 @@
 # Changelog
 
-## [0.1.2] - 2026-08-10
+## [0.1.3] - 2026-08-14
 
-- **why:** Combine `frame_cap` and `foil_cap` into a single `cap` module
-- **model:** kompis/qwen-3.6-think-coding-mtp
-- **tags:** openscad, refactor, deduplication
+- **why:** Separate clearance into per-component values for more accurate tolerances
+- **model:** kompis/qwen-3.6-think-coding
+- **tags:** openscad, tolerance, clearance
 
 ### Changed
 
-- Replaced `frame_cap` and `foil_cap` modules with single `cap(size, peg_d, peg_l, peg_tip_d=0)`
-- `peg_tip_d=0` produces straight pegs (frame cap); `peg_tip_d>0` produces tapered pegs (foil cap)
-- Updated instantiation calls and header comments to use `cap`
+- Split single `clearance` variable into `clearance_rod`, `clearance_aditional`, and `clearance_peg`
+- Rod holes now use `clearance_rod + clearance_aditional` for easier assembly
+- Peg holes use `clearance_peg` for tighter fit
+- Spacer `ring_ratio` changed from 1.66 to 1.5
+- Commented out `cap` instantiation in `drawings/frames/rod-cage.scad`
 
 ## [0.1.1] - 2026-08-10
 
