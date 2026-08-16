@@ -149,6 +149,56 @@ module spacer(size = node_size, rod_hole_d = rod_hole_d) {
     }
 }
 
+module clip(tube_diameter = 6, clip_width = 5, target_opening_angle = 90, wall_thickness = 1) {
+    module clip_profile() {
+        inner_radius = tube_diameter / 2;
+        outer_radius = inner_radius + wall_thickness;
+        center_radius = inner_radius + (wall_thickness / 2);
+        tip_radius = wall_thickness / 2;
+        
+        // Calculate angular compensation for tip protrusion
+        compensation_angle = 2 * asin(tip_radius / center_radius);
+        adjusted_opening_angle = target_opening_angle + compensation_angle;
+        
+        // Size multiplier for the subtractive wedge to ensure clearance
+        cut_size = outer_radius * 2; 
+        
+        union() {
+            difference() {
+                // Main outer ring
+                circle(r=outer_radius);
+                
+                // Inner tube bore
+                circle(r=inner_radius);
+                
+                // Subtractive wedge using the expanded angle
+                polygon(points=[
+                    [0, 0],
+                    [cut_size * sin(adjusted_opening_angle / 2), cut_size * cos(adjusted_opening_angle / 2)],
+                    [cut_size, cut_size],
+                    [-cut_size, cut_size],
+                    [-cut_size * sin(adjusted_opening_angle / 2), cut_size * cos(adjusted_opening_angle / 2)]
+                ]);
+            }
+            
+            // Placement of rounded tips along the adjusted boundary
+            tip_x = center_radius * sin(adjusted_opening_angle / 2);
+            tip_y = center_radius * cos(adjusted_opening_angle / 2);
+            
+            translate([tip_x, tip_y, 0])
+                circle(r=tip_radius);
+                
+            translate([-tip_x, tip_y, 0])
+                circle(r=tip_radius);
+        }
+    }
+
+    // Extrude the 2D profile into the 3D component
+    linear_extrude(height=clip_width, center=true)
+        clip_profile();    
+}
+
+
 // ================= INSTANTIATION =================
 
 // Center: hollow grid node (main frame intersection)
@@ -171,10 +221,10 @@ translate([0, node_size * 1.5, 0]) {
     cap(node_size, peg_d, peg_l);
 }
 
-// Top-right: foil cap (tapered pegs, leaves gap for plastic foil)
-//translate([node_size * 1.5, node_size * 1.5, 0]) {
-//    cap(node_size, peg_d, peg_l, peg_d / 1.5);
-//}
+// Top-right: tiny cap
+translate([node_size * 1.5, node_size * 1.5, 0]) {
+    clip(rod_hole_d, node_size / 4, 90, node_size / 24);
+}
 
 // Top-left: spacer (thin ring, reduces friction between stacked pieces)
 translate([-node_size * 1.5, node_size * 1.5, 0]) {
