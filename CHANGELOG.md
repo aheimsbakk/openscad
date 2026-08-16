@@ -1,12 +1,20 @@
 # Changelog
 
-## [0.1.4] - 2026-08-16
+## [0.1.5] - 2026-08-16
 
-- **why:** Fix incorrect comments, rename misspelled variable, and replace label-only comments with intent-based documentation
+- **why:** Fix outdated header documentation to match current code
 - **model:** kompis/qwen-3.6-think-coding
-- **tags:** openscad, comments, typo
+- **tags:** openscad, documentation, header
 
 ### Changed
+
+- Removed tapered peg references: no part uses tapered pegs in the current build
+- Replaced "cap (tapered)" with "clip" in the parts list
+- Added assembly step 7 describing clip usage
+- Fixed peg clearance value: was 0.2mm (rod clearance), now 0.05mm (actual peg clearance)
+- Removed "Peg variants" section describing unused tapered peg behavior
+
+## [0.1.4] - 2026-08-16
 
 - Renamed `clearance_aditional` to `clearance_additional` across all files
 - Fixed `clearance_rod` comment: was "between pegs and holes," now correctly "between rod and rod holes"

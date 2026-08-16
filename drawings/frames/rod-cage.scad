@@ -8,27 +8,23 @@
 // 1. Cut the aluminum rod to the desired frame length.
 // 2. Slide grid_nodes onto the rod in your desired layout.
 // 3. Push adjacent pieces together so the pegs of one engage the holes of
-//    the next. Pegs have 0.2mm clearance for easy assembly.
-// 4. Cap the frame ends with a cap — straight pegs for aesthetic ends,
-//    or tapered pegs for wrapping foil through.
+//    the next. Pegs have 0.05mm clearance for a snug fit.
+// 4. Cap the frame ends with a cap (straight pegs, flush fit).
 // 5. Use rod_anchors at corners or frame ends to secure the rod and
 //    transfer load into the grid.
 // 6. Place a spacer between two grid_nodes on the same rod to create a
 //    low-friction pivot point — useful for a hinged door.
+// 7. Attach a clip to any rod segment that needs to hold a foil cover in
+//    place. The clip wraps around the rod and its two tips press against
+//    the surface to grip it.
 //
 // Parts shown (left to right, bottom to top):
 //   grid_node (hollow) — main interlocking cube with rod hole
 //   grid_node (solid)  — same shape, no rod hole for edge positions
 //   rod_anchor         — tapered cylinder, anchors the rod
-//   cap (straight)     — solid disc, aesthetic end cap
-//   cap (tapered)      — disc with tapered pegs, leaves gap for foil
+//   cap                — solid disc with straight pegs
+//   clip               — ring with rounded tips that grips the rod
 //   spacer             — thin ring, reduces friction between stacked pieces
-//
-// Peg variants:
-//   Straight pegs  → pegs sit flush against the mating surface.
-//   Tapered pegs   → pegs narrow toward the mating surface, creating a gap
-//                    between the part and its neighbor. Used where plastic
-//                    foil needs to be tucked in.
 
 // ================= PARAMETERS =================
 node_size = 25;
