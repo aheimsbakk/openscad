@@ -1,20 +1,20 @@
 # Changelog
 
-## [0.1.3] - 2026-08-14
+## [0.1.4] - 2026-08-16
 
-- **why:** Separate clearance into per-component values for more accurate tolerances
+- **why:** Fix incorrect comments, rename misspelled variable, and replace label-only comments with intent-based documentation
 - **model:** kompis/qwen-3.6-think-coding
-- **tags:** openscad, tolerance, clearance
+- **tags:** openscad, comments, typo
 
 ### Changed
 
-- Split single `clearance` variable into `clearance_rod`, `clearance_aditional`, and `clearance_peg`
-- Rod holes now use `clearance_rod + clearance_aditional` for easier assembly
-- Peg holes use `clearance_peg` for tighter fit
-- Spacer `ring_ratio` changed from 1.66 to 1.5
-- Commented out `cap` instantiation in `drawings/frames/rod-cage.scad`
+- Renamed `clearance_aditional` to `clearance_additional` across all files
+- Fixed `clearance_rod` comment: was "between pegs and holes," now correctly "between rod and rod holes"
+- Fixed face-hole comment: was "holes for mating pegs," now correctly "additional rod holes"
+- Fixed instantiation label: "tiny cap" renamed to "tube clip"
+- Replaced label-only comments with intent-based explanations in `grid_node`, `clip`, and `small_pegs`
 
-## [0.1.1] - 2026-08-10
+## [0.1.3] - 2026-08-14
 
 - **why:** Improve code readability and documentation for the enclosure parts system
 - **model:** kompis/qwen-3.6-think-coding-mtp
