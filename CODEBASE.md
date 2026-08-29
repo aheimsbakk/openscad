@@ -15,6 +15,8 @@
 │   ├── render-one.sh              # Blueprint component: Render Script (single)
 │   ├── render-all.sh              # Blueprint component: Render Script (batch)
 │   └── verify_codebase_sync.sh    # Synchronization verification
+├── lib/
+│   └── BOSL2/                     # Vendored BOSL2 library (read-only)
 ├── docs/                          # Project documentation
 ├── BLUEPRINT.md                   # Language-agnostic architecture spec
 ├── CODEBASE.md                    # This file — physical path mappings
@@ -30,13 +32,15 @@
 | Drawing (preview)         | previews/<category>/<name>.png  |
 | Render Script (single)    | scripts/render-one.sh           |
 | Render Script (batch)     | scripts/render-all.sh           |
+| BOSL2 Library (vendored)  | lib/BOSL2                       |
 | Architecture Spec         | BLUEPRINT.md                    |
 | File Mapping              | CODEBASE.md                     |
 
 ## Specs
 
 - **Language:** OpenSCAD (`.scad`)
-- **Tool:** OpenSCAD CLI (`/usr/bin/openscad`)
+- **Tool:** OpenSCAD CLI (`/usr/bin/openscad`, minimum 2021.01)
+- **Library:** BOSL2, included from drawings via `include <../../lib/BOSL2/std.scad>`
 - **Output formats:** PNG (preview), STL (3D print, binary)
 - **Naming:** `kebab-case` for all files and directories
 - **Dimensions:** Millimeters (OpenSCAD default, standard for 3D printing)
