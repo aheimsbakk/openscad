@@ -5,10 +5,10 @@
 
 /* [Board Settings] */
 // Number of columns (horizontal direction).
-Number_Of_Columns = 6;       
+Number_Of_Columns = 4;       
 // Number of rows (vertical direction). An odd number keeps the top and
 // bottom rows aligned, so the grid looks symmetric.
-Number_Of_Rows = 11;       
+Number_Of_Rows = 7;       
 // (mm)
 Board_Thickness = 5; 
 // (mm)
@@ -31,14 +31,6 @@ Skadis_Slot_Width = 5;
 Skadis_Slot_Height = 15;    
 // Chamfer the slot openings so tools slide in more easily.
 Chamfer_Skadis_Slots = true;
-
-/* [Web Lattice Settings] */
-// Off = solid board. On = hollow webs between slots, leaving a rib grid.
-Web_Lattice = true;
-// (mm) Lattice beam thickness. Beams keep the full board depth.
-Web_Lattice_Beam_Width = 4;
-
-/* [Hidden] */
 
 $fa=1;
 $fs=.2;
@@ -112,49 +104,10 @@ module corner_hole(x, y, z) {
     }
 }
 
-// Hollows the webs between slots when lattice mode is on. Each pocket fills
-// one empty diamond of the staggered slot grid, so a beam-width web is left
-// around every slot. The pocket grid mirrors the slot staggering: two
-// interleaved grids cover the two diamond orientations.
-module lattice_pockets() {
-    // Pocket size = slot gap minus the beam on each side.
-    pocket_w = hole_spacing_x - Skadis_Slot_Width - 2 * Web_Lattice_Beam_Width;
-    pocket_h = 2 * hole_spacing_y - Skadis_Slot_Height - 2 * Web_Lattice_Beam_Width;
-    assert(pocket_w > 0, "Web_Lattice_Beam_Width is too large for the horizontal slot gap");
-    assert(pocket_h > 0, "Web_Lattice_Beam_Width is too large for the vertical slot gap");
-
-    depth = Board_Thickness + 2; // Cut clear through, matching the slot cuts.
-
-    // Staggered columns (offset by half a pitch), between consecutive row gaps.
-    for (j = [0:floor(Number_Of_Rows / 2) - 1]) {
-        for (i = [0:Number_Of_Columns - 2]) {
-            translate([ edge_margin_x + hole_spacing_x / 2 + i * hole_spacing_x,
-                        edge_margin_y + hole_spacing_y + j * 2 * hole_spacing_y, 0 ]) {
-                cube([ pocket_w, pocket_h, depth ], center = true);
-            }
-        }
-    }
-
-    // Unstaggered columns, centered in the row gaps.
-    for (j = [0:ceil(Number_Of_Rows / 2) - 1]) {
-        for (i = [0:Number_Of_Columns - 1]) {
-            translate([ edge_margin_x + i * hole_spacing_x,
-                        edge_margin_y + j * 2 * hole_spacing_y, 0 ]) {
-                cube([ pocket_w, pocket_h, depth ], center = true);
-            }
-        }
-    }
-}
-
 module pegboard() {
     difference() {
         // Solid board that the slots and holes are cut from.
         rounded_board();
-
-        // Hollow the webs between slots when lattice mode is on.
-        if (Web_Lattice) {
-            lattice_pockets();
-        }
 
         // Stagger every other row by half a pitch, matching the Skadis pattern.
         for (j = [0:Number_Of_Rows-1]) {
