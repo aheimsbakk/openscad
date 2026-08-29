@@ -131,10 +131,27 @@ module lattice_profile() {
                     );
                 }
 
-                // Vertical rail down to the next aligned slot two rows below.
+                // Vertical rails: segments between aligned slots two rows
+                // apart, extended so every rail runs on to the border at
+                // both the top and the bottom of the board.
                 if (j + 2 < Number_Of_Rows) {
+                    // Segment down to the next aligned slot.
                     translate([x - Lattice_Width / 2, y]) {
                         square([Lattice_Width, 2 * hole_spacing_y]);
+                    }
+                } else {
+                    // Topmost slot of this column: run the rail up to the
+                    // top border.
+                    translate([x - Lattice_Width / 2, y]) {
+                        square([Lattice_Width, board_height - y]);
+                    }
+                }
+
+                if (j - 2 < 0) {
+                    // Bottom-most slot of this column: run the rail down to
+                    // the bottom border.
+                    translate([x - Lattice_Width / 2, 0]) {
+                        square([Lattice_Width, y]);
                     }
                 }
             }
