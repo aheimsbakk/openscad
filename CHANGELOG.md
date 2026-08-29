@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.2.0] - 2026-08-29
+
+- **why:** Make previews faster without losing render quality
+- **model:** openrouter/~deepseek/deepseek-v4-flash-latest
+- **tags:** openscad, preview, render, resolution
+
+### Changed
+
+- `drawings/frames/rod-cage.scad` sets `$fs` and `$fa` conditionally on `$preview`: coarse facets in preview, fine facets in render and export
+
 ## [0.1.5] - 2026-08-16
 
 - **why:** Fix outdated header documentation to match current code

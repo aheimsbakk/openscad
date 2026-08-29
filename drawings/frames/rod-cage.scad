@@ -40,9 +40,12 @@ clearance_rod = 0.2;
 clearance_additional = 0.05;
 clearance_peg = 0.05;
 
-// Render resolution
-$fs = 0.1;  // Minimum facet size (nozzle)
-$fa = 1;    // Minimum angle (degrees)
+// Render resolution — coarse in preview (fast), fine in render/export.
+// $preview is true in OpenCSG preview (F5 and PNG without --render),
+// false in render mode (F6 and STL/DXF/SVG export). This keeps the high
+// quality $fs/$fa for final renders while previews stay responsive.
+$fs = $preview ? 1 : 0.1;  // Minimum facet size
+$fa = $preview ? 12 : 1;   // Minimum angle (degrees)
 
 // ================= MAIN MODULES =================
 
