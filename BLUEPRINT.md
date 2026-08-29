@@ -82,14 +82,23 @@ module <name>() {
 
 ### Preview Image Contract
 
-- Generated with `openscad --render --autocenter --viewall`.
+- Fast preview (default): `openscad --autocenter --viewall` without `--render`.
+  OpenCSG preview, finishes in seconds. Details guarded by `$preview` in the
+  source may be omitted.
+- Full render (`FULL=1` in the scripts): `openscad --render --autocenter --viewall`.
+  True geometry; use for the release preview of a finished drawing.
 - Output path mirrors the source path under `previews/`.
 - PNG format, minimum 1200x900 pixels.
 - Camera angle: isometric or three-quarter view (default OpenSCAD perspective).
 
 ### CLI Generation Commands
 
-Generate a preview:
+Generate a fast preview:
+```
+openscad -o previews/<category>/<name>.png --autocenter --viewall --imgsize 1200,900 drawings/<category>/<name>.scad
+```
+
+Generate a full-geometry preview:
 ```
 openscad -o previews/<category>/<name>.png --render --autocenter --viewall --imgsize 1200,900 drawings/<category>/<name>.scad
 ```

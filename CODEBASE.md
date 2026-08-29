@@ -9,7 +9,8 @@
 │       └── rod-cage.scad          # interlocking rod-based enclosure frame
 ├── previews/                      # Generated preview PNGs (mirrors drawings/)
 │   └── frames/
-│       └── rod-cage.png
+│       ├── rod-cage.png
+│       └── skadis-generator.png
 ├── scripts/                       # Build and utility scripts
 │   ├── render-one.sh              # Blueprint component: Render Script (single)
 │   ├── render-all.sh              # Blueprint component: Render Script (batch)
@@ -42,8 +43,9 @@
 
 ## Entry Points
 
-- **Rendering a single drawing:** `./scripts/render-one.sh drawings/<category>/<name>.scad`
-- **Rendering all drawings:** `./scripts/render-all.sh`
+- **Fast preview (default, seconds):** `./scripts/render-one.sh drawings/<category>/<name>.scad`
+- **Full-geometry preview (`FULL=1`, minutes):** `FULL=1 ./scripts/render-one.sh drawings/<category>/<name>.scad`
+- **Rendering all drawings:** `./scripts/render-all.sh` (same `FULL=1` option)
 - **Generating STL:** `openscad -o drawings/<category>/<name>.stl --export-format binstl drawings/<category>/<name>.scad`
 
 ## Language Rationale
@@ -58,4 +60,4 @@
 | Name | Category | Source Path | Preview Path |
 |---|---|---|---|
 | Rod Cage | frames | drawings/frames/rod-cage.scad | previews/frames/rod-cage.png |
-| Skadis Generator | frames | drawings/frames/skadis-generator.scad | |
+| Skadis Generator | frames | drawings/frames/skadis-generator.scad | previews/frames/skadis-generator.png |
