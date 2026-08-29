@@ -6,3 +6,4 @@
 | OpenSCAD identifiers cannot use hyphens | warning | high | openscad, syntax, identifiers |  | archive/2026-08-07-openscad-identifiers.md |
 | $preview variable ignored under --render in repo scripts | pattern | low | openscad, preview, render-scripts |  | archive/2026-08-29-preview-variable-render-scripts.md |
 | Skadis generator lattice pattern decision | decision | medium | openscad, skadis, lattice, 3d-printing, parametrization |  | archive/2026-08-29-skadis-lattice-web.md |
+| Fast preview workflow: $preview guard + FULL=1 render mode | pattern | high | openscad, preview, render-scripts, performance |  | archive/2026-08-29-fast-preview-workflow.md |
