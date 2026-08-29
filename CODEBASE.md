@@ -58,3 +58,4 @@
 | Name | Category | Source Path | Preview Path |
 |---|---|---|---|
 | Rod Cage | frames | drawings/frames/rod-cage.scad | previews/frames/rod-cage.png |
+| Skadis Generator | frames | drawings/frames/skadis-generator.scad | |
