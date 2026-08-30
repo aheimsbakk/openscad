@@ -3,6 +3,11 @@
 #
 # Usage:
 #   ./scripts/render-all.sh
+#   FULL=1 ./scripts/render-all.sh
+#
+# Modes:
+#   default: fast OpenCSG preview PNGs (seconds per drawing).
+#   FULL=1:  full CGAL render (minutes per drawing, true geometry).
 #
 # Requires: Xvfb (for headless PNG generation)
 

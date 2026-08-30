@@ -3,9 +3,17 @@
 #
 # Usage:
 #   ./scripts/render-one.sh drawings/<category>/<name>.scad
+#   FULL=1 ./scripts/render-one.sh drawings/<category>/<name>.scad
 #
 # Output:
 #   previews/<category>/<name>.png
+#
+# Modes:
+#   default: fast OpenCSG preview PNG (seconds). The .scad sources may guard
+#            expensive features with $preview, so fine details such as
+#            lattice bevels can be missing from the image.
+#   FULL=1:  full CGAL render (minutes). True geometry, use this for the
+#            release-quality preview of a finished drawing.
 #
 # Requires: Xvfb (for headless PNG generation)
 # If called from render-all.sh, DISPLAY is already set.
@@ -32,6 +40,7 @@ mkdir -p "$(dirname "$PREVIEW_PATH")"
 
 echo "Rendering: $SCAD_FILE"
 echo "Output:    $PREVIEW_PATH"
+echo "Mode:      $([ "${FULL:-0}" = "1" ] && echo "full CGAL render" || echo "fast preview (FULL=1 for true geometry)")"
 
 # Start Xvfb if DISPLAY is not already set (i.e., not called from render-all.sh)
 XVFB_PID=""
@@ -51,12 +60,20 @@ trap cleanup EXIT
 
 export DISPLAY=:99
 
+RENDER_ARGS=()
+# --render forces full CGAL boolean evaluation (minutes on complex models).
+# Without it OpenSCAD exports the OpenCSG preview, which skips boolean
+# evaluation entirely and finishes in seconds.
+if [ "${FULL:-0}" = "1" ]; then
+	RENDER_ARGS+=(--render)
+fi
+
 openscad \
-	-o "$PREVIEW_PATH" \
-	--render \
+	"${RENDER_ARGS[@]}" \
 	--autocenter \
 	--viewall \
 	--imgsize 1200,900 \
-	"$SCAD_FILE"
+	"$SCAD_FILE" \
+	-o "$PREVIEW_PATH"
 
 echo "Done."

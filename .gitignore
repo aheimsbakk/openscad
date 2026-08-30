@@ -6,3 +6,6 @@
 .venv/
 venv/
 .DS_Store
+
+# Temporary agent workflow files
+.handoff/

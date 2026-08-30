@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.2.1] - 2026-08-29
+
+- **why:** Make the skadis generator easier to read and configure
+- **model:** openrouter/z-ai/glm-5.3-flash
+- **tags:** openscad, skadis, refactor, naming
+
+### Changed
+
+- `drawings/frames/skadis-generator.scad`: renamed all configuration variables to snake_case and regrouped them into Grid, Board, Corner Screw Holes, Slots, and Lattice
+- Removed redundant unit comments; all dimensions are in millimeters
+- Extracted `slots()` and `corner_positions()` helpers to remove duplicated slot and corner loops
+- Removed unused `module capsule`; renamed the `c` parameter of `rounded_rectangle` to `center`
+- Geometry verified unchanged after the refactor: identical volume and bounding box
+
 ## [0.2.0] - 2026-08-29
 
 - **why:** Make previews faster without losing render quality

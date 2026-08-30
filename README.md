@@ -32,12 +32,18 @@ Open a file and press F5 in OpenSCAD to see the current dimensions.
 ## Build scripts
 
 ```bash
-# Preview a single drawing
+# Fast preview of a single drawing (seconds)
 ./scripts/render-one.sh drawings/<category>/<name>.scad
 
-# Preview all drawings
+# Fast preview of all drawings
 ./scripts/render-all.sh
+
+# True-geometry render of a single drawing (minutes; use for finished parts)
+FULL=1 ./scripts/render-one.sh drawings/<category>/<name>.scad
 ```
+
+Fast previews skip expensive details guarded by `$preview` in the `.scad`
+source (for example lattice bevels). `FULL=1` renders the exact geometry.
 
 ## Notes
 

@@ -9,11 +9,14 @@
 │       └── rod-cage.scad          # interlocking rod-based enclosure frame
 ├── previews/                      # Generated preview PNGs (mirrors drawings/)
 │   └── frames/
-│       └── rod-cage.png
+│       ├── rod-cage.png
+│       └── skadis-generator.png
 ├── scripts/                       # Build and utility scripts
 │   ├── render-one.sh              # Blueprint component: Render Script (single)
 │   ├── render-all.sh              # Blueprint component: Render Script (batch)
 │   └── verify_codebase_sync.sh    # Synchronization verification
+├── lib/
+│   └── BOSL2/                     # Vendored BOSL2 library (read-only)
 ├── docs/                          # Project documentation
 ├── BLUEPRINT.md                   # Language-agnostic architecture spec
 ├── CODEBASE.md                    # This file — physical path mappings
@@ -29,21 +32,24 @@
 | Drawing (preview)         | previews/<category>/<name>.png  |
 | Render Script (single)    | scripts/render-one.sh           |
 | Render Script (batch)     | scripts/render-all.sh           |
+| BOSL2 Library (vendored)  | lib/BOSL2                       |
 | Architecture Spec         | BLUEPRINT.md                    |
 | File Mapping              | CODEBASE.md                     |
 
 ## Specs
 
 - **Language:** OpenSCAD (`.scad`)
-- **Tool:** OpenSCAD CLI (`/usr/bin/openscad`)
+- **Tool:** OpenSCAD CLI (`/usr/bin/openscad`, minimum 2021.01)
+- **Library:** BOSL2, included from drawings via `include <../../lib/BOSL2/std.scad>`
 - **Output formats:** PNG (preview), STL (3D print, binary)
 - **Naming:** `kebab-case` for all files and directories
 - **Dimensions:** Millimeters (OpenSCAD default, standard for 3D printing)
 
 ## Entry Points
 
-- **Rendering a single drawing:** `./scripts/render-one.sh drawings/<category>/<name>.scad`
-- **Rendering all drawings:** `./scripts/render-all.sh`
+- **Fast preview (default, seconds):** `./scripts/render-one.sh drawings/<category>/<name>.scad`
+- **Full-geometry preview (`FULL=1`, minutes):** `FULL=1 ./scripts/render-one.sh drawings/<category>/<name>.scad`
+- **Rendering all drawings:** `./scripts/render-all.sh` (same `FULL=1` option)
 - **Generating STL:** `openscad -o drawings/<category>/<name>.stl --export-format binstl drawings/<category>/<name>.scad`
 
 ## Language Rationale
@@ -58,3 +64,4 @@
 | Name | Category | Source Path | Preview Path |
 |---|---|---|---|
 | Rod Cage | frames | drawings/frames/rod-cage.scad | previews/frames/rod-cage.png |
+| Skadis Generator | frames | drawings/frames/skadis-generator.scad | previews/frames/skadis-generator.png |
