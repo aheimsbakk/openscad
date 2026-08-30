@@ -1,5 +1,6 @@
 # Excludes build artifacts and generated files
 *.stl
+*.3mf
 *.deps
 *.param
 .env

@@ -19,7 +19,7 @@ number_of_columns = 6;
 number_of_rows = 11;
 
 /* [Board] */
-board_thickness = 5;
+board_thickness = 4.9;
 board_corner_radius = 10;
 
 /* [Corner Screw Holes] */
@@ -59,7 +59,7 @@ lattice_chamfer_depth = board_thickness / 6;
 // at every radius in this model.
 $fs = $preview ? 1 : 0.1;  // Minimum facet size
 $fa = $preview ? 12 : 1;   // Minimum angle (degrees)
-$fn = 24;
+$fn = 48;
 
 // ================= DERIVED DIMENSIONS =================
 
