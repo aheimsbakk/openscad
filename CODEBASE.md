@@ -5,9 +5,13 @@
 ```
 .
 ├── drawings/                      # OpenSCAD source files (kebab-case)
+│   ├── clips/                     # category: clips
+│   │   └── s-cable-organizer.scad # S-shaped double-hook cable spring clip
 │   └── frames/                    # category: frames
 │       └── rod-cage.scad          # interlocking rod-based enclosure frame
 ├── previews/                      # Generated preview PNGs (mirrors drawings/)
+│   ├── clips/
+│   │   └── s-cable-organizer.png
 │   └── frames/
 │       ├── rod-cage.png
 │       └── skadis-generator.png
@@ -65,3 +69,4 @@
 |---|---|---|---|
 | Rod Cage | frames | drawings/frames/rod-cage.scad | previews/frames/rod-cage.png |
 | Skadis Generator | frames | drawings/frames/skadis-generator.scad | previews/frames/skadis-generator.png |
+| S Cable Organizer | clips | drawings/clips/s-cable-organizer.scad | previews/clips/s-cable-organizer.png |
