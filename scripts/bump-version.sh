@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
-# Bump version in CHANGELOG.md
+# Bump version by prepending a new version section to CHANGELOG.md.
 # Usage: bump-version.sh [patch|minor|major]
+#
+# Inserts an empty "## [X.Y.Z] - <date>" section directly after the
+# "# Changelog" heading. The previous release sections stay untouched;
+# the agent fills in the metadata and change list of the new section.
 
 set -euo pipefail
 
@@ -17,7 +21,7 @@ if [ ! -f "$CHANGELOG" ]; then
 	exit 1
 fi
 
-# Extract current version from first version header
+# Extract current version from the first version header
 current=$(grep -m1 '^## \[' "$CHANGELOG" | sed 's/## \[\(0\.[0-9]*\.[0-9]*\)\].*/\1/')
 if [ -z "$current" ]; then
 	echo "Error: Could not parse version from $CHANGELOG" >&2
@@ -44,8 +48,11 @@ major)
 esac
 
 new="${major}.${minor}.${patch}"
+date=$(date -u +%Y-%m-%d)
 
-# Replace the old version in the first version header
-sed -i "s/^## \[${current}\]/## [${new}]/" "$CHANGELOG"
+# Prepend a fresh version section right after the main heading.
+sed -i "/^# Changelog/a\\
+\\
+## [${new}] - ${date}" "$CHANGELOG"
 
 echo "${current} → ${new}"
