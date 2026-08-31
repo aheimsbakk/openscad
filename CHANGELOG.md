@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.3.0] - 2026-08-31
+
+- **why:** Add a second clip drawing whose middle width and mouth gaps adjust smoothly without bend-rate artifacts
+- **model:** openrouter/z-ai/glm-5.3-flash
+- **tags:** openscad, clips, cable-organizer, parametric
+
+### Added
+
+- `drawings/clips/s-cable-organizer.scad`: S-shaped double-hook cable clip, 15 x 30 x 10 mm, holding one cable per hook (top loads from the right, bottom from the left)
+- Centerline built from sin/cos arcs: hook arcs, curvature-matched quarter-ellipse transitions, flat middle; mouth gaps stay equal for every `tip_deg` value
+- `mid_flat` and `tip_deg` parameters with derived valid range, clamping, and console warning
+- `previews/clips/s-cable-organizer.png`: full CGAL release preview
+- `scripts/bump-version.sh`: prepends a new version section instead of renaming the previous release header
+
 ## [0.2.1] - 2026-08-29
 
 - **why:** Make the skadis generator easier to read and configure
