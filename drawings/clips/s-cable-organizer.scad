@@ -17,7 +17,7 @@ height_y    = 30.0;   // y extent of the bounding box (mm)
 depth_z     = 10.0;   // extrusion depth (mm)
 
 // Strip
-strip_width = 2.0;    // constant thickness of the S strip (mm)
+strip_width = 1.5;    // constant thickness of the S strip (mm)
 
 // Hook tip angle in degrees, measured down from the hook's wide side.
 // This is the master control for both mouth gaps; larger angle =
@@ -41,7 +41,14 @@ mid_y   = height_y / 2;                       // = 15.0, middle centerline y
 // At the current size the matched floor is below 0 (see min_mid), so
 // every value renders smooth; larger = straighter middle, smaller
 // transitions.
-mid_flat    = 2.5;
+mid_flat    = 0.5;
+
+// Render resolution — coarse in preview (fast), fine in render/export.
+// $preview is true in OpenCSG preview (F5 and PNG without --render),
+// false in render mode (F6 and STL/DXF/SVG export). This keeps the high
+// quality $fs/$fa for final renders while previews stay responsive.
+$fs = $preview ? 1 : 0.1;  // Minimum facet size
+$fa = $preview ? 12 : 1;   // Minimum angle (degrees)
 
 // Derived transition geometry
 side_room = cy_top - mid_y;                                  // = 7.5, height available per transition
