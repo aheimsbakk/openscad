@@ -23,7 +23,7 @@ strip_width = 1.5;    // constant thickness of the S strip (mm)
 // This is the master control for both mouth gaps; larger angle =
 // smaller gaps. 10 deg gives about a 4.4 mm gap at the current size.
 // Keep within roughly -40 (very wide open) to +20 (nearly closed).
-tip_deg     = 10;
+tip_deg     = 20;
 
 // Derived centerline geometry
 strip_r = strip_width / 2;
