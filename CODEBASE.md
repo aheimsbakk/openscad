@@ -7,17 +7,24 @@
 ├── drawings/                      # OpenSCAD source files (kebab-case)
 │   ├── clips/                     # category: clips
 │   │   └── s-cable-organizer.scad # S-shaped double-hook cable spring clip
+│   ├── container/                  # category: container
+│   │   └── stackable-box.scad     # vase-mode stackable box with lid, op-art pattern
 │   └── frames/                    # category: frames
-│       └── rod-cage.scad          # interlocking rod-based enclosure frame
+│       ├── rod-cage.scad          # interlocking rod-based enclosure frame
+│       └── skadis-generator.scad  # Skadis pegboard generator plate
 ├── previews/                      # Generated preview PNGs (mirrors drawings/)
 │   ├── clips/
 │   │   └── s-cable-organizer.png
+│   ├── container/
+│   │   └── stackable-box.png
 │   └── frames/
 │       ├── rod-cage.png
 │       └── skadis-generator.png
 ├── scripts/                       # Build and utility scripts
 │   ├── render-one.sh              # Blueprint component: Render Script (single)
 │   ├── render-all.sh              # Blueprint component: Render Script (batch)
+│   ├── bump-version.sh            # Version bump helper
+│   ├── validate-changelog.sh      # Changelog format validation
 │   └── verify_codebase_sync.sh    # Synchronization verification
 ├── lib/
 │   └── BOSL2/                     # Vendored BOSL2 library (read-only)
@@ -70,3 +77,4 @@
 | Rod Cage | frames | drawings/frames/rod-cage.scad | previews/frames/rod-cage.png |
 | Skadis Generator | frames | drawings/frames/skadis-generator.scad | previews/frames/skadis-generator.png |
 | S Cable Organizer | clips | drawings/clips/s-cable-organizer.scad | previews/clips/s-cable-organizer.png |
+| Stackable Box | container | drawings/container/stackable-box.scad | previews/container/stackable-box.png |
