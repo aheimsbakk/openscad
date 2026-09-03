@@ -24,7 +24,7 @@ part = "both";  // ["box", "lid", "plaque", "both"]
 /* [Box] */
 length = 60;    // outer length (X), mm
 width = 60;      // outer width (Y), mm
-height = 35;     // wall height, mm
+height = 30;     // wall height, mm
 corner_r = 6;   // corner rounding, mm
 
 /* [Pattern: 1960s op-art stiffening] */
@@ -45,7 +45,7 @@ pocket_fit = 0.4;   // clearance around the plaque (sides and depth), mm
 lip_w = 1.5;        // retaining lip overlap in X over plaque edge, mm
 lip_t = 1.2;        // retaining lip thickness in Y, mm
 bracket_w = 2.0;    // outer frame rib width beyond slot, mm
-guide_h = 4;        // channel extension above the seated plaque, mm
+guide_h = 2;        // channel extension above the seated plaque, mm
 ledge_ramp_h = 5;  // ledge forward-ramp length below the seated ledge, mm
 
 /* [Stacking] */
