@@ -8,7 +8,7 @@
 │   ├── clips/                     # category: clips
 │   │   └── s-cable-organizer.scad # S-shaped double-hook cable spring clip
 │   ├── container/                  # category: container
-│   │   └── stackable-box.scad     # vase-mode stackable box with lid, op-art pattern
+│   │   └── stackable-box.scad     # vase-mode stackable box, lid, slide-in plaque
 │   └── frames/                    # category: frames
 │       ├── rod-cage.scad          # interlocking rod-based enclosure frame
 │       └── skadis-generator.scad  # Skadis pegboard generator plate
