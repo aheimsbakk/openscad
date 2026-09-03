@@ -10,6 +10,10 @@
 // retaining lips that grip the plaque edges, a solid lower ledge for the
 // plaque to rest on, and an upper entry funnel for slide-in insertion.
 // Fits plaques up to plaque_t. The back and sides carry the op-art pattern.
+// All pocket Z transitions derive from height and the stack parameters, and
+// the plaque self-centers at half the box height — see [Plaque pocket].
+// Lid: a simple rounded cap wrapping the box lip (the top stacking recess
+// band) with adjustable clearance; its height equals the lip.
 
 include <../../lib/BOSL2/std.scad>
 
@@ -18,26 +22,31 @@ include <../../lib/BOSL2/std.scad>
 part = "both";  // ["box", "lid", "plaque", "both"]
 
 /* [Box] */
-length = 100;    // outer length (X), mm
-width = 70;      // outer width (Y), mm
-height = 55;     // wall height, mm
-corner_r = 12;   // corner rounding, mm
+length = 60;    // outer length (X), mm
+width = 60;      // outer width (Y), mm
+height = 35;     // wall height, mm
+corner_r = 6;   // corner rounding, mm
 
 /* [Pattern: 1960s op-art stiffening] */
-pattern = "rings";  // ["waffle", "ribs", "rings", "none"]
+pattern = "waffle";  // ["waffle", "ribs", "rings", "none"]
 pattern_amp = 1.2;   // radial wave depth, mm
 pattern_pitch = 12;  // wave period along wall and height, mm
 
 /* [Plaque pocket (front, -Y)] */
-plaque_w = 50;      // plaque width, mm
-plaque_h = 22;      // plaque height, mm
-pocket_z = 29;      // plaque center height when seated, mm
-plaque_t = 1.5;     // max plaque thickness the pocket accepts, mm
+// pocket_z is derived, not set: the plaque centers at height/2, clamped into
+// the clear band between the stacking zones. Small-box recipe (50x50x25),
+// pass together with the size overrides:
+// -D 'length=50' -D 'width=50' -D 'height=25' -D 'stack_depth=4'
+// -D 'stack_blend=1.5' -D 'plaque_h=6' -D 'guide_h=2'
+plaque_w = 25;      // plaque width, mm
+plaque_h = 10;      // plaque height, mm
+plaque_t = 1;     // max plaque thickness the pocket accepts, mm
 pocket_fit = 0.4;   // clearance around the plaque (sides and depth), mm
-lip_w = 2.5;        // retaining lip overlap in X over plaque edge, mm
+lip_w = 1.5;        // retaining lip overlap in X over plaque edge, mm
 lip_t = 1.2;        // retaining lip thickness in Y, mm
-bracket_w = 3.0;    // outer frame rib width beyond slot, mm
+bracket_w = 2.0;    // outer frame rib width beyond slot, mm
 guide_h = 4;        // channel extension above the seated plaque, mm
+ledge_ramp_h = 5;  // ledge forward-ramp length below the seated ledge, mm
 
 /* [Stacking] */
 stack_depth = 5;      // how far the bottom sinks into the box below, mm
@@ -47,15 +56,16 @@ stack_blend = 2;      // transition width below both inset zones, mm
 stack_count = 1;      // boxes in the preview stack ("both" only)
 
 /* [Lid] */
-lid_rim_h = 10;     // rim height wrapping the box top, mm
-lid_fit = 1.5;      // box top to printed rim wall clearance, mm
-lid_plate_t = 1.6;  // lid plate thickness (vase bottom fill), mm
-lid_ledger = 2.0;   // plate ledge beyond rim, mm
+// Simple rounded cap wrapping the box lip (the top stacking recess band).
+// Height equals the lip. lid_fit sets the clearance around the lip: lower
+// for a tighter grip, raise if the lid is hard to slide on.
+lid_fit = 0.8;      // clearance around the lip band, mm
 
 $fn = 64;
 
 // ================= RENDER LOGIC =================
-lid_outer = length + 2 * (lid_fit + lid_ledger);
+// Lid footprint matches the recessed lip band plus clearance.
+lid_outer = length - 2 * stack_inset + 2 * lid_fit;
 lid_cx = length / 2 + 10 + lid_outer / 2;
 plaque_cx = lid_cx + lid_outer / 2 + 10 + plaque_w / 2;
 if (part == "box") vase_box();
@@ -69,10 +79,19 @@ else {
 }
 
 // ================= SANITY CHECKS =================
-assert(plaque_w + 2 * (pocket_fit + bracket_w) <= length - 2 * corner_r, "Pocket bracket does not fit on the front face.");
-assert(pocket_z + plaque_h / 2 + guide_h <= height - stack_depth - stack_blend, "Pocket channel must clear the top stacking recess.");
-assert(pocket_z - plaque_h / 2 >= stack_depth + stack_blend + 4, "Pocket ledge must clear the bottom stacking zone.");
-assert(lid_fit >= pattern_amp * sin(180 * lid_rim_h / height) + 0.65, "Lid clearance smaller than wall wave near the top plus line width.");
+assert(plaque_w + 2 * (pocket_fit + bracket_w) <= length - 2 * corner_r,
+    str("Pocket frame needs ", plaque_w + 2 * (pocket_fit + bracket_w),
+        " mm, but the straight front face is only ", length - 2 * corner_r,
+        " mm. Reduce plaque_w, pocket_fit, or bracket_w, or increase length."));
+assert(plaque_h + guide_h + 4 <= height - 2 * (stack_depth + stack_blend),
+    str("The plaque window is empty: centered placement needs ", plaque_h + guide_h + 4,
+        " mm of clear height, but only ", height - 2 * (stack_depth + stack_blend),
+        " mm fits between the stacking zones. Reduce plaque_h, guide_h, stack_depth, or stack_blend, or increase height."));
+assert(lid_fit >= 0.65,
+    str("lid_fit = ", lid_fit, " mm is below one printed line width plus tolerance (0.65 mm). Increase lid_fit."));
+assert(corner_r + lid_fit > stack_inset,
+    str("Lid corner rounding (corner_r - stack_inset + lid_fit = ", corner_r - stack_inset + lid_fit,
+        " mm) would go negative. Increase corner_r or lid_fit, or reduce stack_inset."));
 assert(stack_fit < stack_inset, "Recess fit clearance must stay below recess inset, or upper box has no bearing ledge.");
 
 // ================= PATH HELPERS =================
@@ -84,7 +103,6 @@ function smoothstep(a, b, u) =
 slot_w = plaque_w + 2 * pocket_fit;
 slot_x0 = slot_w / 2;
 slot_d = plaque_t + pocket_fit;
-x_lip_in = slot_x0 - lip_w;
 x_bracket_out = slot_x0 + bracket_w;
 
 y_wall = -width / 2;
@@ -92,8 +110,25 @@ y_slot_open = y_wall - slot_d;
 y_front_open = y_slot_open - lip_t;
 bracket_proj = y_wall - y_front_open;
 
+// Height-relative feature levels so any box height renders a valid pocket.
+z_neck0 = height - stack_depth - stack_blend; // top recess transition start
+z_lid_seat = height - stack_depth; // lid seat plane = top of the recess ramp;
+// the recess band and the lid wrap share it, so the pocket only needs to
+// clear z_neck0.
+
+// Plaque self-centering: target half the box height, clamped into the clear
+// window between the bottom stacking zone and the top recess / lid band.
+// The window assert above guarantees pz_lo <= pz_hi, so the clamp result
+// always satisfies both the ledge and funnel clearances.
+pz_lo = stack_depth + stack_blend + 4 + plaque_h / 2;
+pz_hi = z_neck0 - guide_h - plaque_h / 2;
+pocket_z = min(max(height / 2, pz_lo), pz_hi);
+
 z_ledge = pocket_z - plaque_h / 2;
 z_plaque_top = pocket_z + plaque_h / 2;
+// Ledge ramp must never start below the bottom insert zone, or the insert
+// bulges and no longer nests into the box below.
+z_ramp0 = max(stack_depth + stack_blend, z_ledge - ledge_ramp_h);
 insert_inset = stack_inset - stack_fit;
 
 // ================= STACKING ZONES =================
@@ -146,20 +181,22 @@ function outline_at(z) =
         nz = neck_zone(z),
         bz = base_zone(z),
 
-        // Bracket outer ribs active above bottom insert and below top recess
-        b_act = smoothstep(7, 10, z) * (1 - smoothstep(44, 47, z)),
+        // Bracket outer ribs: start above the bottom insert zone, fade out
+        // completely before the lid seat plane
+        b_act = smoothstep(stack_depth + stack_blend, stack_depth + stack_blend + 3, z)
+              * (1 - smoothstep(z_lid_seat - 3, z_lid_seat, z)),
         y_b_front = y_wall - bracket_proj * b_act,
 
         // Resting ledge forms a forward shelf below z_ledge, chamfers back above
-        ledge_act = smoothstep(14, z_ledge, z) * (1 - smoothstep(z_ledge, z_ledge + 2.5, z)),
+        ledge_act = smoothstep(z_ramp0, z_ledge, z) * (1 - smoothstep(z_ledge, z_ledge + 2.5, z)),
         y_c = y_wall - bracket_proj * ledge_act,
 
         // Front retaining lips grip plaque edges, funnel open at top
         lip_act = smoothstep(z_ledge - 1.5, z_ledge + 0.5, z) * (1 - smoothstep(z_plaque_top, z_plaque_top + guide_h, z)),
         x_li = slot_x0 - lip_w * lip_act,
 
-        // Slot cavity opens above resting ledge
-        slot_act = smoothstep(z_ledge, z_ledge + 2.5, z) * (1 - smoothstep(44, 47, z)),
+        // Slot cavity opens above resting ledge, closes before the lid seat
+        slot_act = smoothstep(z_ledge, z_ledge + 2.5, z) * (1 - smoothstep(z_lid_seat - 3, z_lid_seat, z)),
         y_s = y_b_front + (y_slot_open - y_b_front) * slot_act,
 
         // Front perimeter with C-channels [ ] and center ledge/pocket
@@ -206,14 +243,16 @@ module vase_box() {
 }
 
 // ================= LID =================
+// Simple rounded cap wrapping the lip band (the top stacking recess) with
+// lid_fit clearance; height equals the lip. Modeled solid — vase printing
+// turns it into a hollow cap whose ceiling plate stops the lip at full seat.
+lid_h = stack_depth;
+
 module vase_lid() {
-    rim_out = rect([length + 2 * lid_fit, width + 2 * lid_fit],
-        rounding = corner_r + lid_fit);
-    plate_out = offset(rim_out, r = lid_ledger);
-    union() {
-        linear_extrude(lid_plate_t) polygon(plate_out);
-        up(lid_plate_t) linear_extrude(lid_rim_h) polygon(rim_out);
-    }
+    lip_out = rect(
+        [length - 2 * stack_inset + 2 * lid_fit, width - 2 * stack_inset + 2 * lid_fit],
+        rounding = corner_r - stack_inset + lid_fit);
+    linear_extrude(lid_h) polygon(lip_out);
 }
 
 // ================= PLAQUE =================
