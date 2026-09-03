@@ -1,23 +1,25 @@
-// Stackable vase-mode storage box with 1960s op-art stiffening pattern.
-// Purpose: single-wall vase-printed box with a capping lid; boxes stack on lids.
-// Notes:
-//   - The model is SOLID by design (blocks, no hollow parts). Vase (spiral)
-//     mode only prints the bottom fill plus the outermost contour, so a solid
-//     block slices into exactly one continuous wall. Hollow or shelled models
-//     produce extra contours and break vase mode.
-//   - Print "box" and "lid" as SEPARATE vase mode jobs:
-//     openscad -o box.stl -D part=box drawings/container/stackable-box.scad
-//     openscad -o lid.stl -D part=lid drawings/container/stackable-box.scad
-//   - Set `wall` of the print = one extrusion line width in the slicer; the
-//     pattern is what stiffens that single line.
-//   - Lid plate must fit inside the vase bottom fill: set slicer bottom layers
-//     to at least lid_plate_t / layer_height (8 layers at 0.2 mm).
+// Stackable vase-mode storage box: 1960s op-art stiffening pattern, front
+// slide-in plaque pocket, lid, and nesting stacking. The model is SOLID by
+// design (blocks, no hollow parts): vase (spiral) mode prints only the bottom
+// fill plus the outer contour of a solid block, which yields exactly one
+// continuous wall. Hollow models break vase mode.
+// Box and lid print as separate vase jobs (-D part=box / -D part=lid), the
+// plaque prints flat (-D part=plaque), e.g.:
+//   openscad -o box.stl --export-format binstl -D 'part="box"' drawings/container/stackable-box.scad
+// Stacking: the top of the box has a smooth recess (inset stack_inset over
+// the top stack_depth mm); the bottom of the next box is inset by
+// stack_inset - stack_fit and sinks stack_depth into that recess, resting on
+// the recess ledge. Each stacked box adds height - stack_depth of height.
+// Pocket: the plaque slides down from the top between the clamp rails,
+// rests on the ledge, and the funnel shoulder above the channel stops it
+// tipping forward. Fits plaques up to plaque_t.
+// Slicer: bottom layers >= lid_plate_t / layer_height (8 layers at 0.2 mm).
 
 include <../../lib/BOSL2/std.scad>
 
 // ================= PARAMETERS =================
 /* [Part] */
-part = "both";  // ["box", "lid", "both"]
+part = "both";  // ["box", "lid", "plaque", "both"]
 
 /* [Box] */
 length = 100;    // outer length (X), mm
@@ -30,39 +32,53 @@ pattern = "waffle";  // ["waffle", "ribs", "rings", "none"]
 pattern_amp = 1.2;   // radial wave depth, mm
 pattern_pitch = 12;  // wave period along wall and height, mm
 
-/* [Label plaque (front, -Y)] */
+/* [Plaque pocket (front, -Y)] */
 plaque_w = 50;      // plaque width, mm
 plaque_h = 22;      // plaque height, mm
-plaque_z = 30;      // plaque center height, mm
-plaque_d = 1.8;     // plaque raise, mm; must exceed pattern_amp to stand clear
-plaque_blend = 6;   // shoulder blend width, mm
+pocket_z = 29;      // plaque center height when seated, mm
+plaque_t = 1.5;     // max plaque thickness the pocket accepts, mm
+pocket_fit = 0.4;   // clearance around the plaque (sides and depth), mm
+pocket_blend = 3;   // frame shoulder width, mm
+guide_h = 5;        // channel extension above the seated plaque, mm
+rail_w = 4;         // clamp rail width, mm
+rail_grip = 0.15;   // rail protrusion beyond the plaque face, mm
+rail_blend = 1.5;   // clamp rail blend width, mm
+
+/* [Stacking] */
+stack_depth = 5;      // how far the bottom sinks into the box below, mm
+stack_inset = 1.2;    // top recess inset (also the bearing ledge width), mm
+stack_fit = 0.4;      // total side clearance between insert and recess, mm
+stack_blend = 2;      // transition width below both inset zones, mm
+stack_count = 1;      // boxes in the preview stack ("both" only)
 
 /* [Lid] */
-lid_rim_h = 10;     // rim height wrapping the box base, mm
-lid_fit = 1.5;      // box base to printed rim wall clearance, mm (incl. line width)
+lid_rim_h = 10;     // rim height wrapping the box top, mm
+lid_fit = 1.5;      // box top to printed rim wall clearance, mm (incl. line width)
 lid_plate_t = 1.6;  // lid plate thickness (vase bottom fill), mm
 lid_ledger = 2.0;   // plate ledge beyond rim, mm
 
 $fn = 64;
 
 // ================= RENDER LOGIC =================
-if (part == "box") {
-    vase_box();
-} else if (part == "lid") {
-    vase_lid();
-} else {
-    vase_box();
-    right(length / 2 + (length + 2 * (lid_fit + lid_ledger)) / 2 + 10)
-        vase_lid();
+lid_outer = length + 2 * (lid_fit + lid_ledger);
+lid_cx = length / 2 + 10 + lid_outer / 2;
+plaque_cx = lid_cx + lid_outer / 2 + 10 + plaque_w / 2;
+if (part == "box") vase_box();
+else if (part == "lid") vase_lid();
+else if (part == "plaque") vase_plaque();
+else {
+    // Boxes nested: each one sinks stack_depth into the one below.
+    for (i = [0:stack_count - 1])
+        up(i * (height - stack_depth)) vase_box();
+    right(lid_cx) vase_lid();
+    right(plaque_cx) vase_plaque();
 }
 
 // ================= SANITY CHECKS =================
-assert(plaque_w + 2 * plaque_blend <= length - 2 * corner_r,
-    "Plaque plus blend does not fit on the front face.");
-assert(plaque_z + plaque_h / 2 + plaque_blend <= height,
-    "Plaque plus blend does not fit below the top rim.");
-assert(lid_fit >= pattern_amp * sin(180 * lid_rim_h / height) + 0.65,
-    "Lid clearance smaller than the wall wave near the base plus line width.");
+assert(plaque_w + 2 * (pocket_fit + rail_w + pocket_blend) <= length - 2 * corner_r, "Pocket plus frame does not fit on the front face.");
+assert(pocket_z + plaque_h / 2 + guide_h + pocket_blend <= height - stack_depth - stack_blend, "Pocket channel must clear the stacking recess at the top.");
+assert(lid_fit >= pattern_amp * sin(180 * lid_rim_h / height) + 0.65, "Lid clearance smaller than the wall wave near the top plus line width.");
+assert(stack_fit < stack_inset, "Recess fit clearance must stay below the recess inset, or the upper box has no bearing ledge.");
 
 // ================= PATH HELPERS =================
 // Clamped 0..1 smooth transition between a and b (BOSL2 has no smoothstep).
@@ -72,6 +88,11 @@ function smoothstep(a, b, u) =
 // Smooth plateau window: 1 inside [a, b], fading to 0 over `blend` outside.
 function window(u, a, b, blend) =
     smoothstep(a - blend, a, u) * (1 - smoothstep(b, b + blend, u));
+
+// window() with the blend inside the band: 0 at the edges, never spreads
+// past [a, b].
+function window_in(u, a, b, blend) =
+    smoothstep(a, a + blend, u) * (1 - smoothstep(b - blend, b, u));
 
 function dot2(u, v) = u.x * v.x + u.y * v.y;
 
@@ -86,8 +107,8 @@ _flip = dot2(_raw_norms[0], base_path[0]) < 0 ? -1 : 1;
 outward = [for (n = _raw_norms) n * _flip];
 
 // ================= WALL DISPLACEMENT =================
-// Radial wall displacement at arc position t (0..1) and height z.
-// The sin(180*z/height) envelope forces a flat bottom edge and flat top rim,
+// Radial displacement at arc position t (0..1) and height z. The
+// sin(180*z/height) envelope forces a flat bottom edge and flat top rim,
 // which is what lets the box sit on the lid and stack cleanly.
 function pattern_disp(t, z) =
     let(
@@ -99,24 +120,65 @@ function pattern_disp(t, z) =
     pattern == "rings" ? pattern_amp * wz * env :
     pattern == "waffle" ? pattern_amp * wt * wz * env : 0;
 
-// Raised plaque on the front face only (front = -Y, base points at y = -width/2).
-// Outward pillow instead of a recess: the printed single wall keeps full
-// thickness and the writing surface stays on the smooth outer contour.
-function plaque_zone(p, z) =
+pocket_depth = plaque_t + pocket_fit;
+channel_half = plaque_w / 2 + pocket_fit;  // slide channel, fit on each side
+rail_depth = pocket_fit - rail_grip;       // rails proud of the plaque face
+// Bottom footprint inset. Smaller than the recess inset so the insert keeps
+// stack_fit of side clearance, and the recess ledge (stack_inset wide) bears
+// the box above.
+insert_inset = stack_inset - stack_fit;
+
+// Pocket z-profile: ledge below the seated plaque, deep channel, guide
+// extension above. Lower shoulder = ledge; upper shoulder = funnel that
+// stops the plaque tipping forward.
+function pocket_zwin(z) =
+    window(z, pocket_z - plaque_h / 2 - pocket_fit,
+           pocket_z + plaque_h / 2 + guide_h, pocket_blend);
+
+// Full-depth channel, centered on the front face.
+function channel_xwin(x) = window(x, -channel_half, channel_half, pocket_blend);
+
+// Clamp rails flanking the channel. Blends stay inside the band so the rails
+// never narrow the channel below the plaque width.
+function rail_xwin(x) =
+    let(a = channel_half, b = a + rail_w)
+    window_in(x, a, b, rail_blend) + window_in(-x, a, b, rail_blend);
+
+// Front-face zone for pattern suppression (channel + rails + frame band).
+function pocket_zone(p, z) =
     (p.y < -width / 2 + 0.01)
-        ? window(z, plaque_z - plaque_h / 2, plaque_z + plaque_h / 2, plaque_blend)
-          * window(p.x, -plaque_w / 2, plaque_w / 2, plaque_blend)
+        ? pocket_zwin(z)
+          * window(p.x, -(channel_half + rail_w), channel_half + rail_w, pocket_blend)
         : 0;
 
-// Outline at height z: base path pushed along outward normals. The pattern is
-// suppressed inside the plaque zone so the writing surface stays flat.
+// Stacking recess: inward step over the top stack_depth; the shoulder below
+// it is the ledge the upper box rests on.
+function neck_zone(z) = window(z, height - stack_depth, height, stack_blend);
+
+// Bottom insert: inset over the lower stack_depth, so the box sinks into the
+// recess of the box below. Blends back to the full wall just above the
+// engagement depth.
+function base_zone(z) = 1 - smoothstep(stack_depth, stack_depth + stack_blend, z);
+
+// Outline at height z: base path pushed along outward normals. Pattern is
+// suppressed under pocket, stacking recess and bottom insert. Channel wall
+// sits at pocket_depth, the clamp rails only at rail_depth.
 function outline_at(z) = [
     for (i = idx(base_path))
         let(
-            pz = plaque_zone(base_path[i], z),
-            d = pattern_disp(i / len(base_path), z) * (1 - pz) + plaque_d * pz
+            p = base_path[i],
+            pz = pocket_zone(p, z),
+            nz = neck_zone(z),
+            bz = base_zone(z),
+            ch = channel_xwin(p.x),
+            rl = rail_xwin(p.x),
+            d = pattern_disp(i / len(base_path), z) * (1 - pz) * (1 - nz) * (1 - bz)
+                - pocket_zwin(z)
+                  * (pocket_depth * ch * (1 - rl) + rail_depth * rl)
+                - stack_inset * nz
+                - insert_inset * bz
         )
-        base_path[i] + outward[i] * d
+        p + outward[i] * d
 ];
 
 // z samples dense enough for the height waves (10 slices per pitch).
@@ -125,8 +187,8 @@ _zs_raw = [for (z = [0:dz:height]) z];
 zs = (select(_zs_raw, -1) == height) ? _zs_raw : concat(_zs_raw, [height]);
 
 // ================= BOX =================
-// Solid block: the displaced outer surface lofted over the full height and
-// closed with cap discs. Vase mode prints only its outer contour.
+// Solid block: displaced surface lofted over the full height, closed with
+// cap discs. Vase mode prints only its outer contour.
 module vase_box() {
     union() {
         skin([for (z = zs) path3d(outline_at(z), z)], slices = 0, closed = true);
@@ -136,9 +198,8 @@ module vase_box() {
 }
 
 // ================= LID =================
-// Solid tray: plate plus a solid rim block. The printed spiral runs along the
-// rim's outer contour, which is sized so the box base nests inside it
-// (1960s cooler style stacking: box sits on the lid below it).
+// Solid tray: plate plus rim block; the printed spiral runs along the rim's
+// outer contour, which wraps the box top.
 module vase_lid() {
     rim_out = rect([length + 2 * lid_fit, width + 2 * lid_fit],
         rounding = corner_r + lid_fit);
@@ -147,4 +208,12 @@ module vase_lid() {
         linear_extrude(lid_plate_t) polygon(plate_out);
         up(lid_plate_t) linear_extrude(lid_rim_h) polygon(rim_out);
     }
+}
+
+// ================= PLAQUE =================
+// Flat plate, printed normally (no vase mode). Softened edges ease sliding
+// into the pocket.
+module vase_plaque() {
+    offset_sweep(rect([plaque_w, plaque_h], rounding = 3),
+        height = plaque_t - 0.3, rounding = 0.6);
 }

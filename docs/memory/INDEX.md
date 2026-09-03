@@ -10,3 +10,4 @@
 | Fast preview workflow: $preview guard + FULL=1 render mode | pattern | high | openscad, preview, render-scripts, performance |  | archive/2026-08-29-fast-preview-workflow.md |
 | BOSL2 adopted for skadis-generator chamfers | decision | high | openscad, bosl2, chamfer, offset-sweep, performance |  | archive/2026-08-29-bosl2-chamfer-refactor.md |
 | chamfer_cylinder_mask only correct at 45 degrees | warning | medium | openscad, bosl2, chamfer, masks |  | archive/2026-08-29-chamfer-cylinder-mask-45deg.md |
+| Stackable box nesting fit: insert inset = recess inset - fit | pattern | medium | openscad, stacking, vase-mode, parametrization |  | archive/2026-09-03-stackable-box-nesting-fit.md |
