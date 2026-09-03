@@ -12,7 +12,8 @@
 // the recess ledge. Each stacked box adds height - stack_depth of height.
 // Pocket: the plaque slides down from the top between the clamp rails,
 // rests on the ledge, and the funnel shoulder above the channel stops it
-// tipping forward. Fits plaques up to plaque_t.
+// tipping forward. Fits plaques up to plaque_t. The pocket exists only on
+// the front face; the back is a plain patterned wall.
 // Slicer: bottom layers >= lid_plate_t / layer_height (8 layers at 0.2 mm).
 
 include <../../lib/BOSL2/std.scad>
@@ -144,9 +145,13 @@ function rail_xwin(x) =
     let(a = channel_half, b = a + rail_w)
     window_in(x, a, b, rail_blend) + window_in(-x, a, b, rail_blend);
 
+// Front-face indicator: pocket geometry (cut and pattern suppression)
+// exists only on the front (-Y) face, never on the back or corners.
+function is_front(p) = p.y < -width / 2 + 0.01 ? 1 : 0;
+
 // Front-face zone for pattern suppression (channel + rails + frame band).
 function pocket_zone(p, z) =
-    (p.y < -width / 2 + 0.01)
+    is_front(p)
         ? pocket_zwin(z)
           * window(p.x, -(channel_half + rail_w), channel_half + rail_w, pocket_blend)
         : 0;
@@ -173,7 +178,7 @@ function outline_at(z) = [
             ch = channel_xwin(p.x),
             rl = rail_xwin(p.x),
             d = pattern_disp(i / len(base_path), z) * (1 - pz) * (1 - nz) * (1 - bz)
-                - pocket_zwin(z)
+                - is_front(p) * pocket_zwin(z)
                   * (pocket_depth * ch * (1 - rl) + rail_depth * rl)
                 - stack_inset * nz
                 - insert_inset * bz
