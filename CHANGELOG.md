@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.4.0] - 2026-09-04
+
+- **why:** Add a stackable vase-mode storage box with lid and slide-in plaque pocket
+- **model:** openrouter/z-ai/glm-5.3-flash
+- **tags:** openscad, container, vase-mode, stacking, plaque-pocket
+
+### Added
+
+- `drawings/container/stackable-box.scad`: vase-mode box, 60 x 60 x 30 mm, with a 1960s op-art stiffening pattern; prints as box, lid, or plaque via `-D 'part=...'`
+- Front slide-in plaque pocket: the perimeter folds into lateral C-channels with retaining lips, a resting ledge, and an entry funnel; the plaque self-centers at half the box height
+- Nesting stack: the top recess receives the box below with fit clearance; `stack_count` previews a multi-box stack
+- Rounded lid wrapping the box lip with adjustable clearance (`lid_fit`)
+
+### Changed
+
+- `scripts/render-one.sh` and `scripts/render-all.sh`: fast OpenCSG preview by default; `FULL=1` switches to a full CGAL render with true geometry for release-quality PNGs
+
+### Fixed
+
+- Plaque pocket no longer carves into the back face: the cut is gated by a shared front-face test, so the back wall keeps the plain op-art pattern
+- Corner arcs now carry true outward normals, removing the 0.22 mm notch in the stacking inset and creases in the pattern wave
+
 ## [0.3.0] - 2026-08-31
 
 - **why:** Add a second clip drawing whose middle width and mouth gaps adjust smoothly without bend-rate artifacts

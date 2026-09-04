@@ -70,6 +70,14 @@ Every `.scad` file must follow this structure:
 3. **Module definition** — The main geometry wrapped in a named module.
 4. **Instantiation** — The module called once at the bottom of the file.
 
+### Slide-in Plaque Interface Contract
+
+Drawings providing removable identification plaques must satisfy:
+- Lateral retention channels forming opposing C-profile guides: each channel contains a back wall, lateral boundary stop, and inward-projecting retention lip that constrains plaque translation and rotation.
+- A lower bearing ledge transverse to the insertion axis that arrests insertion at the seated position.
+- An upper entry funnel facilitating top-down insertion.
+- Continuous boundary topology: when single-perimeter continuous fabrication (vase mode) is targeted, all retention guides and ledges must form a contiguous, non-self-intersecting loop without unprintable horizontal overhangs.
+
 Drawings MAY include the vendored BOSL2 library via
 `include <../../lib/BOSL2/std.scad>` (adjust the relative depth to the
 drawing's directory depth). Library use is optional; drawings without
