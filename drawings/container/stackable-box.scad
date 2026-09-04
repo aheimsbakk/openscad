@@ -143,20 +143,28 @@ cx = length / 2 - corner_r;
 cy = width / 2 - corner_r;
 fn_c = 12;
 
+// Perimeter segments as [point, outward_normal] pairs. True surface normals
+// (radial from each arc's own center, axis normals on straight walls) keep
+// the displacement field continuous across segment junctions; deriving the
+// normal from the point position (unit(p)) deviates up to ~39 degrees at the
+// tangent junctions and cut a visible notch into the stacking inset and the
+// pattern. The duplicated tangent points each carry their own edge normal,
+// so offsets behave like a true polygon offset. Front and pocket points
+// share [0,-1] so collapsed pocket features stay flush with the wall.
 // Corner arcs (CCW)
-c_tr = [for (a = [0 : 90/fn_c : 90]) [cx + corner_r*cos(a), cy + corner_r*sin(a)]];
-c_tl = [for (a = [90 : 90/fn_c : 180]) [-cx + corner_r*cos(a), cy + corner_r*sin(a)]];
-c_bl = [for (a = [180 : 90/fn_c : 270]) [-cx + corner_r*cos(a), -cy + corner_r*sin(a)]];
-c_br = [for (a = [-90 : 90/fn_c : 0]) [cx + corner_r*cos(a), -cy + corner_r*sin(a)]];
+c_tr = [for (a = [0 : 90/fn_c : 90]) [[cx, cy] + corner_r*[cos(a), sin(a)], [cos(a), sin(a)]]];
+c_tl = [for (a = [90 : 90/fn_c : 180]) [[-cx, cy] + corner_r*[cos(a), sin(a)], [cos(a), sin(a)]]];
+c_bl = [for (a = [180 : 90/fn_c : 270]) [[-cx, -cy] + corner_r*[cos(a), sin(a)], [cos(a), sin(a)]]];
+c_br = [for (a = [-90 : 90/fn_c : 0]) [[cx, -cy] + corner_r*[cos(a), sin(a)], [cos(a), sin(a)]]];
 
 // Wall points along straight segments
-wall_r = [for (y = [c_br[len(c_br)-1].y + 1.5 : 1.5 : c_tr[0].y - 0.5]) [length/2, y]];
-wall_t = [for (x = [c_tr[len(c_tr)-1].x - 1.5 : -1.5 : c_tl[0].x + 0.5]) [x, width/2]];
-wall_l = [for (y = [c_tl[len(c_tl)-1].y - 1.5 : -1.5 : c_bl[0].y + 0.5]) [-length/2, y]];
+wall_r = [for (y = [c_br[len(c_br)-1][0].y + 1.5 : 1.5 : c_tr[0][0].y - 0.5]) [[length/2, y], [1, 0]]];
+wall_t = [for (x = [c_tr[len(c_tr)-1][0].x - 1.5 : -1.5 : c_tl[0][0].x + 0.5]) [[x, width/2], [0, 1]]];
+wall_l = [for (y = [c_tl[len(c_tl)-1][0].y - 1.5 : -1.5 : c_bl[0][0].y + 0.5]) [[-length/2, y], [-1, 0]]];
 
 // Front wall segments flanking the bracket
-front_l = [for (x = [-cx : 1.5 : -x_bracket_out - 0.5]) [x, y_wall]];
-front_r = [for (x = [x_bracket_out + 0.5 : 1.5 : cx]) [x, y_wall]];
+front_l = [for (x = [-cx : 1.5 : -x_bracket_out - 0.5]) [[x, y_wall], [0, -1]]];
+front_r = [for (x = [x_bracket_out + 0.5 : 1.5 : cx]) [[x, y_wall], [0, -1]]];
 
 // Center pocket points across back wall
 n_center = 16;
@@ -175,12 +183,11 @@ function pattern_disp(t, z) =
     pattern == "rings" ? pattern_amp * wz * env :
     pattern == "waffle" ? pattern_amp * wt * wz * env : 0;
 
-// Outline at height z: perimeter with C-channel brackets and resting ledge
-function outline_at(z) =
+// Raw outline at height z as [point, outward_normal] pairs: the perimeter
+// with C-channel brackets and resting ledge, before displacement. Exposed as
+// its own function so tooling can inspect the normal field directly.
+function outline_raw(z) =
     let(
-        nz = neck_zone(z),
-        bz = base_zone(z),
-
         // Bracket outer ribs: start above the bottom insert zone, fade out
         // completely before the lid seat plane
         b_act = smoothstep(stack_depth + stack_blend, stack_depth + stack_blend + 3, z)
@@ -201,34 +208,43 @@ function outline_at(z) =
 
         // Front perimeter with C-channels [ ] and center ledge/pocket
         front_bracket = [
-            [-x_bracket_out, y_wall],
-            [-x_bracket_out, y_b_front],
-            [-x_li, y_b_front],
-            [-x_li, y_s],
-            [-slot_x0, y_s],
-            [-slot_x0, y_c],
-            each [for (x = center_xs) [x, y_c]],
-            [slot_x0, y_c],
-            [slot_x0, y_s],
-            [x_li, y_s],
-            [x_li, y_b_front],
-            [x_bracket_out, y_b_front],
-            [x_bracket_out, y_wall]
+            [[-x_bracket_out, y_wall], [0, -1]],
+            [[-x_bracket_out, y_b_front], [0, -1]],
+            [[-x_li, y_b_front], [0, -1]],
+            [[-x_li, y_s], [0, -1]],
+            [[-slot_x0, y_s], [0, -1]],
+            [[-slot_x0, y_c], [0, -1]],
+            each [for (x = center_xs) [[x, y_c], [0, -1]]],
+            [[slot_x0, y_c], [0, -1]],
+            [[slot_x0, y_s], [0, -1]],
+            [[x_li, y_s], [0, -1]],
+            [[x_li, y_b_front], [0, -1]],
+            [[x_bracket_out, y_b_front], [0, -1]],
+            [[x_bracket_out, y_wall], [0, -1]]
         ],
         full_front = concat(front_l, front_bracket, front_r),
-        rest = concat(c_br, wall_r, c_tr, wall_t, c_tl, wall_l, c_bl),
-        full_raw = concat(full_front, rest),
-        perim_len = path_length(full_raw)
+        rest = concat(c_br, wall_r, c_tr, wall_t, c_tl, wall_l, c_bl)
+    )
+    concat(full_front, rest);
+
+// Outline at height z: displace the raw perimeter along its per-point
+// normals with the pattern wave (suppressed inside the pocket) and the
+// stacking inset.
+function outline_at(z) =
+    let(
+        nz = neck_zone(z),
+        bz = base_zone(z),
+        raw = outline_raw(z)
     )
     [
-        for (i = idx(full_raw))
+        for (i = idx(raw))
             let(
-                p = full_raw[i],
+                p = raw[i][0],
+                n = raw[i][1],
                 in_pocket = (p.y < y_wall + 0.01 && abs(p.x) <= x_bracket_out + 1.0),
                 p_disp = in_pocket ? 0 :
-                    pattern_disp(i / len(full_raw), z) * (1 - nz) * (1 - bz),
-                d_stack = (bz > 0 ? -insert_inset * bz : (nz > 0 ? -stack_inset * nz : 0)),
-                n = (p.y < y_wall + 0.01) ? [0, -1] : unit(p)
+                    pattern_disp(i / len(raw), z) * (1 - nz) * (1 - bz),
+                d_stack = (bz > 0 ? -insert_inset * bz : (nz > 0 ? -stack_inset * nz : 0))
             )
             p + n * (p_disp + d_stack)
     ];
