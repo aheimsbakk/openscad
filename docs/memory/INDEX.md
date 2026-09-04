@@ -14,3 +14,4 @@
 | Per-point wall displacement terms must be face-gated | warning | medium | openscad, displacement, skin, cgal, debugging |  | archive/2026-09-03-face-gated-displacement.md |
 | Vase-mode slide-in C-channel and resting ledge geometry | pattern | medium | openscad, vase-mode, c-channel, skin, parametrization |  | archive/2026-09-03-vase-mode-c-channel-ledge.md |
 | stackable-box lid is a snug lip-wrap cap; pocket auto-centering | decision | high | openscad, vase-mode, lid, pocket, parametrization |  | archive/2026-09-03-snug-lid-cap.md |
+| stackable-box corner notch: unit(p) is not the surface normal | warning | medium | openscad, displacement, normals, skin, stacking |  | archive/2026-09-04-corner-notch-unit-p-normal.md |
