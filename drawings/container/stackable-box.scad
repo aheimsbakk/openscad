@@ -25,7 +25,7 @@ part = "both";  // ["box", "lid", "plaque", "both"]
 length = 60;    // outer length (X), mm
 width = 60;      // outer width (Y), mm
 height = 30;     // wall height, mm
-corner_r = 6;   // corner rounding, mm
+corner_r = 12;   // corner rounding, mm
 
 /* [Pattern: 1960s op-art stiffening] */
 pattern = "waffle";  // ["waffle", "ribs", "rings", "none"]
@@ -51,7 +51,7 @@ ledge_ramp_h = 5;  // ledge forward-ramp length below the seated ledge, mm
 /* [Stacking] */
 stack_depth = 5;      // how far the bottom sinks into the box below, mm
 stack_inset = 1.2;    // top recess inset (bearing ledge width), mm
-stack_fit = 0.4;      // side clearance between insert and recess, mm
+stack_fit = -1;      // side clearance between insert and recess, mm
 stack_blend = 2;      // transition width below both inset zones, mm
 stack_count = 1;      // boxes in the preview stack ("both" only)
 
