@@ -10,6 +10,8 @@
 // retaining lips that grip the plaque edges, a solid lower ledge for the
 // plaque to rest on, and an upper entry funnel for slide-in insertion.
 // Fits plaques up to plaque_t. The back and sides carry the op-art pattern.
+// The pocket is optional: plaque_pocket = false renders a plain patterned
+// front wall; the plaque stays available as a standalone part.
 // All pocket Z transitions derive from height and the stack parameters, and
 // the plaque self-centers at half the box height — see [Plaque pocket].
 // Lid: a simple rounded cap wrapping the box lip (the top stacking recess
@@ -33,12 +35,15 @@ pattern_amp = 1.2;   // radial wave depth, mm
 pattern_pitch = 12;  // wave period along wall and height, mm
 
 /* [Plaque pocket (front, -Y)] */
+// Include the front slide-in plaque pocket. false gives a plain front wall
+// that carries the op-art pattern like the back and sides.
+plaque_pocket = true;
 // pocket_z is derived, not set: the plaque centers at height/2, clamped into
 // the clear band between the stacking zones. Small-box recipe (50x50x25),
 // pass together with the size overrides:
 // -D 'length=50' -D 'width=50' -D 'height=25' -D 'stack_depth=4'
 // -D 'stack_blend=1.5' -D 'plaque_h=6' -D 'guide_h=2'
-plaque_w = 25;      // plaque width, mm
+plaque_w = 30;      // plaque width, mm
 plaque_h = 10;      // plaque height, mm
 plaque_t = 1;     // max plaque thickness the pocket accepts, mm
 pocket_fit = 0.4;   // clearance around the plaque (sides and depth), mm
@@ -79,14 +84,17 @@ else {
 }
 
 // ================= SANITY CHECKS =================
-assert(plaque_w + 2 * (pocket_fit + bracket_w) <= length - 2 * corner_r,
-    str("Pocket frame needs ", plaque_w + 2 * (pocket_fit + bracket_w),
-        " mm, but the straight front face is only ", length - 2 * corner_r,
-        " mm. Reduce plaque_w, pocket_fit, or bracket_w, or increase length."));
-assert(plaque_h + guide_h + 4 <= height - 2 * (stack_depth + stack_blend),
-    str("The plaque window is empty: centered placement needs ", plaque_h + guide_h + 4,
-        " mm of clear height, but only ", height - 2 * (stack_depth + stack_blend),
-        " mm fits between the stacking zones. Reduce plaque_h, guide_h, stack_depth, or stack_blend, or increase height."));
+// Pocket geometry asserts only apply when the pocket is included.
+if (plaque_pocket) {
+    assert(plaque_w + 2 * (pocket_fit + bracket_w) <= length - 2 * corner_r,
+        str("Pocket frame needs ", plaque_w + 2 * (pocket_fit + bracket_w),
+            " mm, but the straight front face is only ", length - 2 * corner_r,
+            " mm. Reduce plaque_w, pocket_fit, or bracket_w, or increase length."));
+    assert(plaque_h + guide_h + 4 <= height - 2 * (stack_depth + stack_blend),
+        str("The plaque window is empty: centered placement needs ", plaque_h + guide_h + 4,
+            " mm of clear height, but only ", height - 2 * (stack_depth + stack_blend),
+            " mm fits between the stacking zones. Reduce plaque_h, guide_h, stack_depth, or stack_blend, or increase height."));
+}
 assert(lid_fit >= 0.65,
     str("lid_fit = ", lid_fit, " mm is below one printed line width plus tolerance (0.65 mm). Increase lid_fit."));
 assert(corner_r + lid_fit > stack_inset,
@@ -166,6 +174,10 @@ wall_l = [for (y = [c_tl[len(c_tl)-1][0].y - 1.5 : -1.5 : c_bl[0][0].y + 0.5]) [
 front_l = [for (x = [-cx : 1.5 : -x_bracket_out - 0.5]) [[x, y_wall], [0, -1]]];
 front_r = [for (x = [x_bracket_out + 0.5 : 1.5 : cx]) [[x, y_wall], [0, -1]]];
 
+// Plain front wall used when the pocket is disabled (plaque_pocket = false);
+// sampled like the other straight walls so the pattern displaces evenly
+front_plain = [for (x = [-cx : 1.5 : cx - 0.5]) [[x, y_wall], [0, -1]]];
+
 // Center pocket points across back wall
 n_center = 16;
 dx_c = 2 * slot_x0 / n_center;
@@ -222,7 +234,7 @@ function outline_raw(z) =
             [[x_bracket_out, y_b_front], [0, -1]],
             [[x_bracket_out, y_wall], [0, -1]]
         ],
-        full_front = concat(front_l, front_bracket, front_r),
+        full_front = plaque_pocket ? concat(front_l, front_bracket, front_r) : front_plain,
         rest = concat(c_br, wall_r, c_tr, wall_t, c_tl, wall_l, c_bl)
     )
     concat(full_front, rest);
@@ -241,7 +253,8 @@ function outline_at(z) =
             let(
                 p = raw[i][0],
                 n = raw[i][1],
-                in_pocket = (p.y < y_wall + 0.01 && abs(p.x) <= x_bracket_out + 1.0),
+                in_pocket = (plaque_pocket && p.y < y_wall + 0.01
+                             && abs(p.x) <= x_bracket_out + 1.0),
                 p_disp = in_pocket ? 0 :
                     pattern_disp(i / len(raw), z) * (1 - nz) * (1 - bz),
                 d_stack = (bz > 0 ? -insert_inset * bz : (nz > 0 ? -stack_inset * nz : 0))

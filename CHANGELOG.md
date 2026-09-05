@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.5.0] - 2026-09-05
+
+- **why:** Let users print the box without the plaque pocket when no nameplate is needed
+- **model:** openrouter/z-ai/glm-5.3-flash
+- **tags:** openscad, container, plaque-pocket, parametrization
+
+### Added
+
+- `drawings/container/stackable-box.scad`: `plaque_pocket` true/false parameter; `false` renders a plain front wall so the op-art pattern covers all four sides
+
+### Changed
+
+- Pocket size asserts in `drawings/container/stackable-box.scad` now run only when `plaque_pocket = true`; stacking and lid asserts stay unconditional
+
 ## [0.4.0] - 2026-09-04
 
 - **why:** Add a stackable vase-mode storage box with lid and slide-in plaque pocket
