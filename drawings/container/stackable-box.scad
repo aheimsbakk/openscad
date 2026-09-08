@@ -20,53 +20,78 @@
 include <../../lib/BOSL2/std.scad>
 
 // ================= PARAMETERS =================
-/* [Part] */
-part = "both";  // ["box", "lid", "plaque", "both"]
+/* [Parts to render] */
+// Which part to render
+part = "both"; // [box:Box, lid:Lid, plaque:Plaque, both:All]
 
-/* [Box] */
-length = 60;    // outer length (X), mm
-width = 60;      // outer width (Y), mm
-height = 30;     // wall height, mm
-corner_r = 12;   // corner rounding, mm
+/* [Dimensions] */
+// Outer length along X
+length = 60; // [60:256]
+// Outer width along Y
+width = 60; // [60:256]
+// Wall height
+height = 30; // [30:256]
+// Corner rounding radius of the footprint
+corner_r = 12; // [12:24]
 
-/* [Pattern: 1960s op-art stiffening] */
-pattern = "waffle";  // ["waffle", "ribs", "rings", "none"]
-pattern_amp = 1.2;   // radial wave depth, mm
-pattern_pitch = 12;  // wave period along wall and height, mm
+/* [Pattern] */
+// Wall pattern
+pattern = "waffle"; // [waffle:Waffle, ribs:Ribs, rings:Rings, none:None]
+// Wave depth
+pattern_amp = 1.2;
+// Wave spacing
+pattern_pitch = 12;
 
-/* [Plaque pocket (front, -Y)] */
-// Include the front slide-in plaque pocket. false gives a plain front wall
-// that carries the op-art pattern like the back and sides.
+/*[ Plaque pocket ]*/
+// Front slide-in plaque pocket
 plaque_pocket = true;
-// pocket_z is derived, not set: the plaque centers at height/2, clamped into
-// the clear band between the stacking zones. Small-box recipe (50x50x25),
-// pass together with the size overrides:
-// -D 'length=50' -D 'width=50' -D 'height=25' -D 'stack_depth=4'
-// -D 'stack_blend=1.5' -D 'plaque_h=6' -D 'guide_h=2'
-plaque_w = 30;      // plaque width, mm
-plaque_h = 10;      // plaque height, mm
-plaque_t = 1;     // max plaque thickness the pocket accepts, mm
-pocket_fit = 0.4;   // clearance around the plaque (sides and depth), mm
-lip_w = 1.5;        // retaining lip overlap in X over plaque edge, mm
-lip_t = 1.2;        // retaining lip thickness in Y, mm
-bracket_w = 2.0;    // outer frame rib width beyond slot, mm
-guide_h = 2;        // channel extension above the seated plaque, mm
-ledge_ramp_h = 5;  // ledge forward-ramp length below the seated ledge, mm
+    // pocket_z is derived, not set: the plaque centers at height/2, clamped
+    // into the clear band between the stacking zones. Small-box recipe
+    // (50x50x25), pass together with the size overrides:
+    // -D 'length=50' -D 'width=50' -D 'height=25' -D 'stack_depth=4'
+    // -D 'stack_blend=1.5' -D 'plaque_h=6' -D 'guide_h=2'
+
+// Plaque width
+plaque_w = 30;
+// Plaque height
+plaque_h = 10;
+// Maximum plaque thickness
+plaque_t = 1;
+// Clearance around the plaque
+pocket_fit = 0.4;
+// Lip overlap over the plaque edge
+lip_w = 1.5;
+// Lip thickness
+lip_t = 1.2;
+// Frame width around the slot
+bracket_w = 2.0;
+// Entry funnel height above the plaque
+guide_h = 2;
+// Ramp length under the plaque ledge
+ledge_ramp_h = 5;
 
 /* [Stacking] */
-stack_depth = 5;      // how far the bottom sinks into the box below, mm
-stack_inset = 1.2;    // top recess inset (bearing ledge width), mm
-stack_fit = -1;      // side clearance between insert and recess, mm
-stack_blend = 2;      // transition width below both inset zones, mm
-stack_count = 1;      // boxes in the preview stack ("both" only)
+// How far the bottom sinks into the box below
+stack_depth = 5;
+// Top recess inset
+stack_inset = 1.2;
+// Nesting fit; negative loose, positive tight
+stack_fit = -1;
+// Taper width of the stacking zones
+stack_blend = 2;
+// Boxes stacked in the preview
+stack_count = 1;
 
 /* [Lid] */
-// Simple rounded cap wrapping the box lip (the top stacking recess band).
-// Height equals the lip. lid_fit sets the clearance around the lip: lower
-// for a tighter grip, raise if the lid is hard to slide on.
-lid_fit = 0.8;      // clearance around the lip band, mm
+// Clearance around the box lip; lower for a tighter grip
+lid_fit = 0.8;
 
+/* [Quality] */
+// Rendering resolution
 $fn = 64;
+
+// Hide customizer logic for all values below this
+module __Customizer_Limit__ () {}
 
 // ================= RENDER LOGIC =================
 // Lid footprint matches the recessed lip band plus clearance.

@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.6.0] - 2026-09-08
+
+- **why:** Make the Customizer panel usable so users can tweak the box without editing code
+- **model:** openrouter/z-ai/glm-5.3-flash
+- **tags:** openscad, customizer, annotations, container
+
+### Added
+
+- Flush-left Customizer description line above every parameter in `drawings/container/stackable-box.scad`; the OpenSCAD parser only reads the single line directly above an assignment, so the old trailing comments never showed
+- Slider ranges for the box dimensions (`length`, `width`, `height`, `corner_r`) and labeled dropdowns for `part` and `pattern`
+- `Quality` tab describing the `$fn` rendering resolution
+- Customizer annotation rules for OpenSCAD 2021.01 recorded in `docs/memory/` for future drawings
+
+### Changed
+
+- Customizer tabs renamed to plain names: `Parts to render`, `Dimensions`, `Pattern`, `Plaque pocket`
+- Parameter descriptions shortened and "mm" references removed (all sizes are in millimeters by convention)
+- CLI recipe comment indented so the Customizer no longer shows it as the `plaque_w` description
+
 ## [0.5.0] - 2026-09-05
 
 - **why:** Let users print the box without the plaque pocket when no nameplate is needed

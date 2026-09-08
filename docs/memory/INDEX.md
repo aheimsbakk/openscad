@@ -15,3 +15,4 @@
 | Vase-mode slide-in C-channel and resting ledge geometry | pattern | medium | openscad, vase-mode, c-channel, skin, parametrization |  | archive/2026-09-03-vase-mode-c-channel-ledge.md |
 | stackable-box lid is a snug lip-wrap cap; pocket auto-centering | decision | high | openscad, vase-mode, lid, pocket, parametrization |  | archive/2026-09-03-snug-lid-cap.md |
 | stackable-box corner notch: unit(p) is not the surface normal | warning | medium | openscad, displacement, normals, skin, stacking |  | archive/2026-09-04-corner-notch-unit-p-normal.md |
+| OpenSCAD Customizer annotation rules (2021.01 parser) | pattern | high | openscad, customizer, annotations, parametrization |  | archive/2026-09-08-customizer-description-rules.md |
