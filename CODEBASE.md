@@ -5,6 +5,8 @@
 ```
 .
 ├── drawings/                      # OpenSCAD source files (kebab-case)
+│   ├── audio/                     # category: audio
+│   │   └── phone-horn.scad        # passive phone-amplifier horn, exponential flare
 │   ├── clips/                     # category: clips
 │   │   └── s-cable-organizer.scad # S-shaped double-hook cable spring clip
 │   ├── container/                  # category: container
@@ -13,6 +15,8 @@
 │       ├── rod-cage.scad          # interlocking rod-based enclosure frame
 │       └── skadis-generator.scad  # Skadis pegboard generator plate
 ├── previews/                      # Generated preview PNGs (mirrors drawings/)
+│   ├── audio/
+│   │   └── phone-horn.png
 │   ├── clips/
 │   │   └── s-cable-organizer.png
 │   ├── container/
@@ -74,6 +78,7 @@
 
 | Name | Category | Source Path | Preview Path |
 |---|---|---|---|
+| Phone Horn | audio | drawings/audio/phone-horn.scad | previews/audio/phone-horn.png |
 | Rod Cage | frames | drawings/frames/rod-cage.scad | previews/frames/rod-cage.png |
 | Skadis Generator | frames | drawings/frames/skadis-generator.scad | previews/frames/skadis-generator.png |
 | S Cable Organizer | clips | drawings/clips/s-cable-organizer.scad | previews/clips/s-cable-organizer.png |
