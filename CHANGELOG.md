@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.7.0] - 2026-09-09
+
+- **why:** Add a passive phone-amplifier horn, then keep the blueprint generic for all drawings and fold the updated agent rules into one release
+- **model:** openrouter/z-ai/glm-5.3-flash
+- **tags:** audio, horn, blueprint, rules, governance, memory
+
+### Added
+
+- `drawings/audio/phone-horn.scad`: passive phone-amplifier horn with exponential flare derived from Webster's equation (`m = 4*pi*fc/c`), rectangular throat to octagonal mouth loft, flat bottom, and a slot lip that sets the phone insertion depth; defaults hit 500 Hz cutoff with mouth perimeter above the cutoff wavelength
+- `previews/audio/phone-horn.png` full-geometry preview
+- Preview ghost pattern for mating parts (translucent `%`-modifier block behind `$preview && show_<part>`), recorded in `docs/memory/` with the skin 3D-profile loft technique and the blueprint consent rule
+
+### Changed
+
+- `BLUEPRINT.md` is now drawing-agnostic: only repo-wide contracts remain (file structure, BOSL2 inclusion, preview requirements, CLI commands)
+- `.opencode/RULES.md` restructured: rules renumbered, new "Commit Consent" rule (no commits, pushes, or PRs without explicit user request), new "Verification Gate" rule (run lint/typecheck/tests before completion), and sharper "Layer Boundaries" and "State Ownership & Concurrency" wording
+- `.opencode/skills/wrap-up/SKILL.md` description trimmed; the Builder-to-QA handoff phrase is gone
+
+### Removed
+
+- `BLUEPRINT.md`: the two drawing-specific contracts ("Phone Horn Acoustic Model Contract", "Slide-in Plaque Interface Contract") and the concrete `audio/` category from the component hierarchy; that design intent lives in the `.scad` file headers and concrete paths in `CODEBASE.md`
+
 ## [0.6.0] - 2026-09-08
 
 - **why:** Make the Customizer panel usable so users can tweak the box without editing code

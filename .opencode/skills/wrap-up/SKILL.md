@@ -1,6 +1,6 @@
 ---
 name: wrap-up
-description: Apply end-of-task ceremony for changelog, version bumping, and git commits. Use when a task is complete and ready for finalization — after the user says "wrap up", "commit", or "done", or when the Builder hands off to QA.
+description: Apply end-of-task ceremony for changelog, version bumping, and git commits. Use when a task is complete and ready for finalization — after the user says "wrap up", "commit", or "done".
 ---
 
 ## What this skill does

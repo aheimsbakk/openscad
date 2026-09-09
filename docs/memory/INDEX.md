@@ -18,3 +18,4 @@
 | OpenSCAD Customizer annotation rules (2021.01 parser) | pattern | high | openscad, customizer, annotations, parametrization |  | archive/2026-09-08-customizer-description-rules.md |
 | Lofted constant-wall horns via skin 3D profiles | pattern | medium | openscad, bosl2, skin, loft, walls, parametrization |  | archive/2026-09-09-skin-3d-profiles-loft.md |
 | Preview ghosts of mating parts are preferred | preference | medium | openscad, preview, ghost, usability, parametrization |  | archive/2026-09-09-preview-ghost-parts.md |
+| BLUEPRINT.md changes require explicit user consent | preference | high | blueprint, governance, consent, documentation |  | archive/2026-09-09-blueprint-governance.md |
