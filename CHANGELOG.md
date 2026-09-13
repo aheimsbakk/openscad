@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.8.0] - 2026-09-13
+
+- **why:** Add the travel porridge container with a fitted wrap-around lid and an optional snap-bead lock
+- **model:** openrouter/z-ai/glm-5.3-flash
+- **tags:** container, lid, snap-bead, openscad, cgal
+
+### Added
+
+- `drawings/container/travel-porage-container.scad`: hollow cup sized by internal dimensions (`box_d`, `box_h`, `pocket_w`, `pocket_d`), configurable `wall_t` and floor plate `box_plate_t`
+- Wrap-around lid with flush outer wall, lid seat over the neck, configurable clearances, printed upside down (plate on the bed)
+- Optional snap bead (`bead`, `bead_h`, `bead_w`, `bead_lift`) with matching neck groove
+- Previews: `previews/container/travel-porage-container.png` and `previews/container/travel-porage-lid.png` (full CGAL renders)
+
+### Fixed
+
+- Full-render CGAL crashes: all silhouettes derive from a single offset of a pre-sized raw footprint instead of chained offsets
+
 ## [0.7.0] - 2026-09-09
 
 - **why:** Add a passive phone-amplifier horn, then keep the blueprint generic for all drawings and fold the updated agent rules into one release

@@ -10,7 +10,8 @@
 │   ├── clips/                     # category: clips
 │   │   └── s-cable-organizer.scad # S-shaped double-hook cable spring clip
 │   ├── container/                  # category: container
-│   │   └── stackable-box.scad     # vase-mode stackable box, lid, slide-in plaque
+│   │   ├── stackable-box.scad     # vase-mode stackable box, lid, slide-in plaque
+│   │   └── travel-porage-container.scad  # vase-mode solid: porridge-box cylinder with side spoon pocket and wrap-around lid
 │   └── frames/                    # category: frames
 │       ├── rod-cage.scad          # interlocking rod-based enclosure frame
 │       └── skadis-generator.scad  # Skadis pegboard generator plate
@@ -20,7 +21,9 @@
 │   ├── clips/
 │   │   └── s-cable-organizer.png
 │   ├── container/
-│   │   └── stackable-box.png
+│   │   ├── stackable-box.png
+│   │   ├── travel-porage-container.png
+│   │   └── travel-porage-lid.png
 │   └── frames/
 │       ├── rod-cage.png
 │       └── skadis-generator.png
@@ -83,3 +86,5 @@
 | Skadis Generator | frames | drawings/frames/skadis-generator.scad | previews/frames/skadis-generator.png |
 | S Cable Organizer | clips | drawings/clips/s-cable-organizer.scad | previews/clips/s-cable-organizer.png |
 | Stackable Box | container | drawings/container/stackable-box.scad | previews/container/stackable-box.png |
+| Travel Porridge Container | container | drawings/container/travel-porage-container.scad | previews/container/travel-porage-container.png |
+| Travel Porridge Container Lid (show=lid) | container | drawings/container/travel-porage-container.scad | previews/container/travel-porage-lid.png |

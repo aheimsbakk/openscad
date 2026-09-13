@@ -19,3 +19,6 @@
 | Lofted constant-wall horns via skin 3D profiles | pattern | medium | openscad, bosl2, skin, loft, walls, parametrization |  | archive/2026-09-09-skin-3d-profiles-loft.md |
 | Preview ghosts of mating parts are preferred | preference | medium | openscad, preview, ghost, usability, parametrization |  | archive/2026-09-09-preview-ghost-parts.md |
 | BLUEPRINT.md changes require explicit user consent | preference | high | blueprint, governance, consent, documentation |  | archive/2026-09-09-blueprint-governance.md |
+| Vase-mode sketches: the union silhouette is the design | warning | high | openscad, vase-mode, sketches, parametrization, ghosts |  | archive/2026-09-13-vase-mode-sketch-silhouette.md |
+| BOSL2 transforms need children, not argument-attached geometry; true tapers need stacked hulls | warning | medium | openscad, bosl2, transforms, syntax, taper |  | archive/2026-09-13-bosl2-transform-children.md |
+| Module braces, region booleans, chained offsets vs CGAL | warning | high | openscad, bosl2, modules, regions, cgal, offsets |  | archive/2026-09-13-openscad-cgal-footguns.md |
