@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.8.2] - 2026-09-13
+
+- **why:** Drop the snap bead: the neck groove never rendered reliably and the feature cost more than it delivered
+- **model:** openrouter/z-ai/glm-5.3-flash
+- **tags:** container, lid, snap-bead, removal
+
+### Removed
+
+- Snap bead and matching neck groove from `drawings/container/travel-porage-container.scad`: parameters (`bead`, `bead_h`, `bead_w`, `bead_lift`), ring geometry (`groove_ring`, `bead_ring`), the groove cut in the neck band, the bead ring in the lid, and the three bead sanity asserts
+- Regenerated both previews (`travel-porage-container.png`, `travel-porage-lid.png`) as full CGAL renders of the plain friction-fit design
+
 ## [0.8.1] - 2026-09-13
 
 - **why:** Remove a superseded memory entry that described an outdated render pipeline

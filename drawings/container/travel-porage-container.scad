@@ -19,10 +19,6 @@
 // top edge carries the same base_r fillet as the container's bottom edge.
 // The lid prints upside down (plate on the bed, skirt ring rising) and
 // is modeled that way; the seated fit is shown as a preview ghost.
-// Optional snap bead: a ring on the skirt's inner wall clicks into a
-// groove in the neck wall bead_lift above the seat line. Effective snap
-// depth is bead_h - lid_fit; turn off with bead=false to remove both
-// bead and groove.
     // Export the container (normal solid print: floor, walls, open top):
     //   openscad -o travel-porage-container.stl --export-format binstl -D 'show="container"' drawings/container/travel-porage-container.scad
     // Export the lid (print it as modeled: plate on the bed, skirt up):
@@ -33,6 +29,10 @@
 include <../../lib/BOSL2/std.scad>
 
 // ================= PARAMETERS =================
+
+// Which part to render: both (beside each other), container, or lid
+show = "both"; // [both, container, lid]
+
 /* [Porridge box space] */
 // Internal diameter: porridge box diameter plus a fit clearance
 box_d = 85; // [60:120]
@@ -67,19 +67,6 @@ lid_fit = 0.4; // [0.2:0.05:1.0]
 lid_skirt_t = 2; // [1.2:0.2:4]
 // Lid top plate thickness
 lid_plate_t = 3; // [2:0.5:6]
-
-/* [Snap bead] */
-// Snap bead locking the lid to the neck (adds a matching groove)
-bead = true;
-// Bead protrusion; effective snap depth = bead_h - lid_fit
-bead_h = 1.0; // [0.6:0.1:2]
-// Bead band height along the wall
-bead_w = 1.2; // [0.8:0.2:3]
-// Distance from the skirt's bottom edge up to the bead
-bead_lift = 2; // [1:1:10]
-
-// Which part to render: both (beside each other), container, or lid
-show = "both"; // [both, container, lid]
 
 /* [Quality] */
 // Rendering resolution: coarse in preview for speed, full for export
@@ -118,12 +105,6 @@ assert(box_d > 2 * (edge_r + neck_inset),
     str("The neck inset (", neck_inset, " mm) plus the edge rounding swallow the internal cylinder. Reduce lid_skirt_t or lid_fit, or increase box_d."));
 assert(pocket_w > edge_r + 2 * neck_inset && pocket_d > 2 * edge_r + 2 * neck_inset,
     str("The neck inset (", neck_inset, " mm) plus the edge rounding swallow the pocket. Reduce lid_skirt_t or lid_fit, or increase the pocket."));
-assert(!bead || bead_h > lid_fit + 0.2,
-    str("bead_h = ", bead_h, " mm must exceed lid_fit (", lid_fit, " mm) by at least 0.2 mm, or the bead never engages the groove."));
-assert(!bead || bead_lift + bead_w < lid_overlap - 2,
-    str("The bead (lift ", bead_lift, " + height ", bead_w, " mm) does not fit inside the lid overlap (", lid_overlap, " mm). Reduce the bead or increase lid_overlap."));
-assert(!bead || wall_t > bead_h + 0.8,
-    str("wall_t = ", wall_t, " mm leaves less than 0.8 mm of neck wall under the ", bead_h, " mm groove. Reduce bead_h or increase wall_t."));
 
 // ================= SILHOUETTE =================
 // All silhouettes come from one parametric raw footprint grown by delta on
@@ -152,17 +133,6 @@ wall = offset(raw(wall_t), r = edge_r);
 wall_neck = offset(raw(wall_t - neck_inset), r = edge_r);
 // Neck cavity: the neck inset by the wall thickness.
 neck_cavity = offset(raw(-neck_inset), r = edge_r);
-// Snap bead geometry: the groove ring is the band between the neck outer
-// surface grown by bead_h and the same surface embedded 0.01 mm inward
-// (embedding avoids coplanar faces); the bead ring is the matching band
-// on the skirt's inner wall, embedded into the skirt.
-groove_ring = difference(offset(raw(wall_t - neck_inset + bead_h), r = edge_r),
-    offset(raw(wall_t - neck_inset - 0.01), r = edge_r));
-// Bead ring: protrudes INWARD from the skirt's inner wall (delta
-// wall_t - lid_skirt_t), tip at delta wall_t - lid_skirt_t - bead_h,
-// embedded 0.01 mm into the skirt wall on its outer boundary.
-bead_ring = difference(offset(raw(wall_t - lid_skirt_t + 0.01), r = edge_r),
-    offset(raw(wall_t - lid_skirt_t - bead_h), r = edge_r));
 // Cavity bottom fillet radius: concentric with the outer base fillet.
 cavity_r = base_r - wall_t;
 
@@ -178,15 +148,7 @@ module travel_porage_container()
         union() {
             offset_sweep(wall, height = z_seat, bottom = os_circle(r = base_r));
             up(z_seat)
-                if (bead)
-                    // Neck band with the groove for the lid's snap bead.
-                    difference() {
-                        offset_sweep(wall_neck, height = lid_overlap);
-                        up(z_seat + bead_lift) linear_sweep(groove_ring,
-                            height = bead_w);
-                    }
-                else
-                    offset_sweep(wall_neck, height = lid_overlap);
+                offset_sweep(wall_neck, height = lid_overlap);
         }
         union() {
             // 0.01 mm overlap into the neck cavity avoids coplanar cap
@@ -214,12 +176,6 @@ module travel_porage_lid() {
             offset_sweep(offset(raw(wall_t - lid_skirt_t), r = edge_r),
                 height = lid_overlap + 0.01);
     }
-    if (bead)
-        // Snap bead ring on the skirt's inner wall. The skirt's bottom
-        // edge is at the top in print orientation, hence the lift is
-        // measured from there.
-        up(lid_plate_t + lid_overlap - bead_lift - bead_w)
-            linear_sweep(bead_ring, height = bead_w);
 }
 
 // ================= INSTANTIATION =================
