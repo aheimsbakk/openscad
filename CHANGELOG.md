@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.8.1] - 2026-09-13
+
+- **why:** Remove a superseded memory entry that described an outdated render pipeline
+- **model:** openrouter/z-ai/glm-5.3-flash
+- **tags:** memory, housekeeping
+
+### Removed
+
+- `docs/memory/archive/2026-08-29-preview-variable-render-scripts.md` and its INDEX row; superseded by the fast-preview-workflow entry (scripts now default to OpenCSG preview, `FULL=1` opts into full render)
+
 ## [0.8.0] - 2026-09-13
 
 - **why:** Add the travel porridge container with a fitted wrap-around lid and an optional snap-bead lock
