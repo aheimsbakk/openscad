@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.8.3] - 2026-09-15
+
+- **why:** The porridge box must slide through the full inner space, so the seat-band ledge had to go
+- **model:** openrouter/z-ai/glm-5.3-flash
+- **tags:** container, cavity, neck, continuity
+
+### Changed
+
+- `travel_porage_container` in `drawings/container/travel-porage-container.scad`: the internal cavity is now one continuous `inner` sweep from floor top to rim; the inward neck-cavity step at the seat line is removed
+- In the lid-seat band the wall is now `neck_inset` thick instead of `wall_t`; the outer neck step and the lid are unchanged
+- Removed the obsolete pocket-vs-neck-inset assert and the `neck_cavity` silhouette; updated header comments
+- Regenerated `previews/container/travel-porage-container.png`
+
 ## [0.8.2] - 2026-09-13
 
 - **why:** Drop the snap bead: the neck groove never rendered reliably and the feature cost more than it delivered

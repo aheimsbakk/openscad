@@ -3,20 +3,21 @@
 // for a spoon. box_d, box_h, pocket_w and pocket_d are the usable inner
 // space; the wall adds wall_t around the silhouette and the floor adds
 // box_plate_t below it (outer height = box_h + box_plate_t, outer
-// diameter = box_d + 2 * wall_t). The wall runs uniform around the
-// silhouette, through the base fillet (concentric arcs), and around the
-// neck step under the lid.
+// diameter = box_d + 2 * wall_t). The internal space is one continuous
+// silhouette from floor top to rim; under the lid overlap the outer wall
+// only steps in (neck step, lid seat stop).
 // Rounding: the pocket's vertical edges and its junctions into the cylinder
-// are rounded in the footprint (offset), the bottom edge gets a circular
-// fillet (offset_sweep). Internal dimensions stay exact in both cases.
+// are rounded in the footprint (offset); the bottom edge is square.
+// Internal dimensions stay exact in both cases.
 // Lid: a cap that wraps the whole silhouette (cylinder + pocket). Its
 // outer wall is flush with the container's main outer wall; the skirt
 // overlaps the wall by lid_overlap and caps the top with a lid_plate_t
 // plate. To keep the outer envelope unchanged, the container's neck is
 // narrowed by a straight step over the lid overlap (same silhouette,
 // scaled in by the skirt thickness plus the clearance); the step also
-// acts as a stop so the lid can only seat one lid_overlap deep. The lid
-// top edge carries the same base_r fillet as the container's bottom edge.
+// acts as a stop so the lid can only seat one lid_overlap deep. In that
+// band the wall is neck_inset thick instead of wall_t. The lid
+// top edge is square.
 // The lid prints upside down (plate on the bed, skirt ring rising) and
 // is modeled that way; the seated fit is shown as a preview ghost.
     // Export the container (normal solid print: floor, walls, open top):
@@ -37,7 +38,7 @@ show = "both"; // [both, container, lid]
 // Internal diameter: porridge box diameter plus a fit clearance
 box_d = 85; // [60:120]
 // Internal height: usable depth from floor top to rim
-box_h = 130; // [80:200]
+box_h = 130; // [10:200]
 
 /* [Spoon pocket] */
 // Internal pocket length along X; the pocket reaches pocket_w / 2 into
@@ -47,8 +48,6 @@ pocket_w = 30; // [15:60]
 pocket_d = 30; // [15:60]
 
 /* [Rounding] */
-// Bottom fillet radius where the wall meets the floor
-base_r = 6; // [0:16]
 // Radius for the pocket edges and their junctions into the cylinder
 edge_r = 6; // [0:12]
 
@@ -70,10 +69,10 @@ lid_plate_t = 3; // [2:0.5:6]
 
 /* [Quality] */
 // Rendering resolution: coarse in preview for speed, full for export
-$fn = $preview ? 32 : 96;
+//$fn = $preview ? 32 : 96;
 
 $fs = $preview ? 1 : 0.1;  // Minimum facet size
-$fa = $preview ? 12 : 1;   // Minimum angle (degrees)
+$fa = $preview ? 6 : 1;   // Minimum angle (degrees)
 
 
 // Hide customizer logic for all values below this
@@ -93,18 +92,13 @@ assert(pocket_d > 2 * edge_r,
         " mm). Reduce edge_r or increase pocket_d."));
 assert(pocket_w > 2 * edge_r,
     str("edge_r = ", edge_r, " mm consumes the pocket's contact with the cylinder. Reduce edge_r or increase pocket_w."));
-assert(box_d > 2 * (edge_r + base_r - wall_t),
-    str("The base fillet (radius ", base_r, " mm) plus the edge rounding swallow the internal cylinder. Reduce the rounding or increase box_d."));
-assert(box_h + box_plate_t > lid_overlap + base_r,
-    str("The container (outer height ", box_h + box_plate_t, " mm) is too short for the lid seat (", lid_overlap, " mm) plus the base fillet. Increase box_h."));
+assert(box_d > 2 * edge_r,
+    str("The edge rounding swallows the internal cylinder. Reduce edge_r or increase box_d."));
+assert(box_h + box_plate_t > lid_overlap,
+    str("The container (outer height ", box_h + box_plate_t, " mm) is too short for the lid seat (", lid_overlap, " mm). Increase box_h."));
 assert(wall_t > neck_inset + 0.4,
     str("wall_t = ", wall_t, " mm must exceed the neck inset (", neck_inset, " mm) plus one extrusion line, or the neck walls vanish. Reduce lid_skirt_t or lid_fit, or increase wall_t."));
-assert(wall_t < base_r,
-    str("wall_t = ", wall_t, " mm must stay below the base fillet radius (", base_r, " mm) so the inner fillet keeps a positive radius."));
-assert(box_d > 2 * (edge_r + neck_inset),
-    str("The neck inset (", neck_inset, " mm) plus the edge rounding swallow the internal cylinder. Reduce lid_skirt_t or lid_fit, or increase box_d."));
-assert(pocket_w > edge_r + 2 * neck_inset && pocket_d > 2 * edge_r + 2 * neck_inset,
-    str("The neck inset (", neck_inset, " mm) plus the edge rounding swallow the pocket. Reduce lid_skirt_t or lid_fit, or increase the pocket."));
+
 
 // ================= SILHOUETTE =================
 // All silhouettes come from one parametric raw footprint grown by delta on
@@ -131,47 +125,33 @@ wall = offset(raw(wall_t), r = edge_r);
 // Neck silhouette: the outer wall narrowed for the lid's inner cavity plus
 // the clearance (delta wall_t - neck_inset).
 wall_neck = offset(raw(wall_t - neck_inset), r = edge_r);
-// Neck cavity: the neck inset by the wall thickness.
-neck_cavity = offset(raw(-neck_inset), r = edge_r);
-// Cavity bottom fillet radius: concentric with the outer base fillet.
-cavity_r = base_r - wall_t;
 
 // ================= MAIN MODULE =================
 module travel_porage_container()
     // Hollow cup: the outer block (full silhouette up to the neck step,
     // inset silhouette over the lid overlap) minus the internal cavity.
-    // The cavity fillet has radius base_r - wall_t, so the wall keeps its
-    // thickness through the bottom curve; the floor is a box_plate_t
-    // plate under the box_h deep cavity; the neck cavity steps in with
-    // the outer step and runs past the rim to leave it open.
+    // The cavity is one continuous inner silhouette from floor top to
+    // past the rim (single sweep, open top); in the seat band the wall
+    // is neck_inset thick.
     difference() {
         union() {
-            offset_sweep(wall, height = z_seat, bottom = os_circle(r = base_r));
+            offset_sweep(wall, height = z_seat);
             up(z_seat)
                 offset_sweep(wall_neck, height = lid_overlap);
         }
-        union() {
-            // 0.01 mm overlap into the neck cavity avoids coplanar cap
-            // faces (z-fighting in preview) at the inner step.
-            up(box_plate_t) offset_sweep(inner,
-                height = z_seat - box_plate_t + 0.01,
-                bottom = os_circle(r = cavity_r));
-            up(z_seat) offset_sweep(neck_cavity, height = lid_overlap + 1);
-        }
+        // The sweep runs 1 mm past the rim so the top face never stays
+        // coplanar with the outer wall (avoids zero-thickness cap faces).
+        up(box_plate_t) offset_sweep(inner, height = outer_h - box_plate_t + 1);
     }
 
 // ================= LID MODULE =================
 module travel_porage_lid() {
     // Modeled upside down in print orientation: the plate lies on the bed
-    // with its base_r fillet as the domed underside (in use that fillet is
-    // the rounded top edge, same radius as the container's bottom edge).
+    // with a flat, square top edge in use.
     // The skirt is a plain hollow: one cavity sweep cuts the ring out of
-    // the top, so the skirt opens upward for printing. The 2D-ring-only
-    // construction is impossible here because base_r is larger than
-    // lid_plate_t: the fillet dome runs up into the skirt.
+    // the top, so the skirt opens upward for printing.
     difference() {
-        offset_sweep(wall, height = lid_overlap + lid_plate_t,
-            bottom = os_circle(r = base_r));
+        offset_sweep(wall, height = lid_overlap + lid_plate_t);
         up(lid_plate_t)
             offset_sweep(offset(raw(wall_t - lid_skirt_t), r = edge_r),
                 height = lid_overlap + 0.01);

@@ -11,3 +11,4 @@ venv/
 # Temporary agent workflow files
 .handoff/
 tmp/
+drawings/**/*.json
