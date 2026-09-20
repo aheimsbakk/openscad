@@ -12,9 +12,11 @@
 │   ├── container/                  # category: container
 │   │   ├── stackable-box.scad     # vase-mode stackable box, lid, slide-in plaque
 │   │   └── travel-porage-container.scad  # vase-mode solid: porridge-box cylinder with side spoon pocket and wrap-around lid
-│   └── frames/                    # category: frames
-│       ├── rod-cage.scad          # interlocking rod-based enclosure frame
-│       └── skadis-generator.scad  # Skadis pegboard generator plate
+│   ├── frames/                    # category: frames
+│   │   ├── rod-cage.scad          # interlocking rod-based enclosure frame
+│   │   └── skadis-generator.scad  # Skadis pegboard generator plate
+│   └── skadis/                    # category: skadis
+│       └── skadis-box.scad        # vase-mode slide-on Skadis box + snap pegs (part selector)
 ├── previews/                      # Generated preview PNGs (mirrors drawings/)
 │   ├── audio/
 │   │   └── phone-horn.png
@@ -24,9 +26,13 @@
 │   │   ├── stackable-box.png
 │   │   ├── travel-porage-container.png
 │   │   └── travel-porage-lid.png
-│   └── frames/
-│       ├── rod-cage.png
-│       └── skadis-generator.png
+│   ├── frames/
+│   │   ├── rod-cage.png
+│   │   └── skadis-generator.png
+│   └── skadis/
+│       ├── skadis-box.png         # seated on pegs, back wall view
+│       ├── skadis-box-mount.png   # mid-mount, fins exposed
+│       └── skadis-peg.png         # flat print orientation
 ├── scripts/                       # Build and utility scripts
 │   ├── render-one.sh              # Blueprint component: Render Script (single)
 │   ├── render-all.sh              # Blueprint component: Render Script (batch)
@@ -88,3 +94,6 @@
 | Stackable Box | container | drawings/container/stackable-box.scad | previews/container/stackable-box.png |
 | Travel Porridge Container | container | drawings/container/travel-porage-container.scad | previews/container/travel-porage-container.png |
 | Travel Porridge Container Lid (show=lid) | container | drawings/container/travel-porage-container.scad | previews/container/travel-porage-lid.png |
+| Skadis Slide-On Box (part=box) | skadis | drawings/skadis/skadis-box.scad | previews/skadis/skadis-box.png |
+| Skadis Slide-On Box, mid-mount (part=both, mount_lift=85) | skadis | drawings/skadis/skadis-box.scad | previews/skadis/skadis-box-mount.png |
+| Skadis Snap Peg (part=peg) | skadis | drawings/skadis/skadis-box.scad | previews/skadis/skadis-peg.png |

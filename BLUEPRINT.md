@@ -152,7 +152,7 @@ No persistent storage. All drawings are plain text `.scad` files stored in Git.
 ## Naming Conventions
 
 - File and directory names: `kebab-case` (e.g., `wall-mount-bracket.scad`, `cable-clip`).
-- Categories are optional. Use them when a drawing belongs to a clear group (e.g., `fasteners/`, `mounts/`, `connectors/`).
+- Categories are optional. Use them when a drawing belongs to a clear group (e.g., `fasteners/`, `mounts/`, `connectors/`, `skadis/`).
 - Preview PNG paths must mirror the source `.scad` path exactly.
 
 ## Build & Utility Scripts
