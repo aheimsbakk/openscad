@@ -13,7 +13,7 @@
 │   │   ├── stackable-box.scad     # vase-mode stackable box, lid, slide-in plaque
 │   │   └── travel-porage-container.scad  # vase-mode solid: porridge-box cylinder with side spoon pocket and wrap-around lid
 │   └── frames/                    # category: frames
-│       ├── pot-stand.scad         # two-piece slot-together pot stand (trivet)
+│       ├── pot-stand.scad         # two-piece slot-together pot stand with leaning pot-support walls
 │       ├── rod-cage.scad          # interlocking rod-based enclosure frame
 │       └── skadis-generator.scad  # Skadis pegboard generator plate
 ├── previews/                      # Generated preview PNGs (mirrors drawings/)

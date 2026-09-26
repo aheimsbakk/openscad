@@ -1,5 +1,35 @@
 # Changelog
 
+## [0.10.1] - 2026-09-26
+
+- **why:** Keep the memory system truthful: three entries described code that has since changed
+- **model:** openrouter/z-ai/glm-5.3-flash
+- **tags:** memory, documentation, maintenance
+
+### Changed
+
+- Rewrote the skadis lattice entry: the web width parameter is now `lattice_width` and the lattice is on by default (`enable_lattice = true`), so the old "solid board default" and `Web_Lattice_Beam_Width` claims were false
+- Rewrote the face-gating entry: the `is_front(p)` test no longer exists; face gating now uses face-specific `[point, normal]` point lists
+- Rewrote the corner-notch entry: the referenced `.handoff/` regression probe no longer exists
+- The other 19 entries were verified against the current drawings and kept unchanged
+
+## [0.10.0] - 2026-09-26
+
+- **why:** Keep pots from sliding off the stand and show how the support angle cradles flared pots
+- **model:** openrouter/z-ai/glm-5.3-flash
+- **tags:** frames, pot-stand, pot-support, ghost-pot
+
+### Added
+
+- `support_height`, `support_angle`, and `support_width` parameters in a new `[Pot support]` Customizer group
+- `support_wall()` in `drawings/frames/pot-stand.scad`: a full-thickness wall on each bar end above the leg, leaning outward about the pot rim line so a pot with matching wall slope rests flush on it; both slot variants and the assembled ghost get all four walls
+- `ghost_pot()` preview aid: translucent flared pot resting in the support walls, rising `ghost_pot_extra` (20 mm) above them; excluded from renders and STL exports
+
+### Changed
+
+- `bar_length` is now `pot_diameter + 2 * support_width`, so the pot diameter is the inner width between the support walls
+- Regenerated `previews/frames/pot-stand.png`
+
 ## [0.9.0] - 2026-09-26
 
 - **why:** Show how the two trivet halves fit together and make the drawing easy to tune in the Customizer
