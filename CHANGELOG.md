@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.10.1] - 2026-09-26
+
+- **why:** Keep the memory system truthful: three entries described code that has since changed
+- **model:** openrouter/z-ai/glm-5.3-flash
+- **tags:** memory, documentation, maintenance
+
+### Changed
+
+- Rewrote the skadis lattice entry: the web width parameter is now `lattice_width` and the lattice is on by default (`enable_lattice = true`), so the old "solid board default" and `Web_Lattice_Beam_Width` claims were false
+- Rewrote the face-gating entry: the `is_front(p)` test no longer exists; face gating now uses face-specific `[point, normal]` point lists
+- Rewrote the corner-notch entry: the referenced `.handoff/` regression probe no longer exists
+- The other 19 entries were verified against the current drawings and kept unchanged
+
 ## [0.10.0] - 2026-09-26
 
 - **why:** Keep pots from sliding off the stand and show how the support angle cradles flared pots
