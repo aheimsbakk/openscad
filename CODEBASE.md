@@ -13,6 +13,7 @@
 │   │   ├── stackable-box.scad     # vase-mode stackable box, lid, slide-in plaque
 │   │   └── travel-porage-container.scad  # vase-mode solid: porridge-box cylinder with side spoon pocket and wrap-around lid
 │   └── frames/                    # category: frames
+│       ├── pot-stand.scad         # two-piece slot-together pot stand (trivet)
 │       ├── rod-cage.scad          # interlocking rod-based enclosure frame
 │       └── skadis-generator.scad  # Skadis pegboard generator plate
 ├── previews/                      # Generated preview PNGs (mirrors drawings/)
@@ -25,6 +26,7 @@
 │   │   ├── travel-porage-container.png
 │   │   └── travel-porage-lid.png
 │   └── frames/
+│       ├── pot-stand.png
 │       ├── rod-cage.png
 │       └── skadis-generator.png
 ├── scripts/                       # Build and utility scripts
@@ -83,6 +85,7 @@
 |---|---|---|---|
 | Phone Horn | audio | drawings/audio/phone-horn.scad | previews/audio/phone-horn.png |
 | Rod Cage | frames | drawings/frames/rod-cage.scad | previews/frames/rod-cage.png |
+| Pot Stand | frames | drawings/frames/pot-stand.scad | previews/frames/pot-stand.png |
 | Skadis Generator | frames | drawings/frames/skadis-generator.scad | previews/frames/skadis-generator.png |
 | S Cable Organizer | clips | drawings/clips/s-cable-organizer.scad | previews/clips/s-cable-organizer.png |
 | Stackable Box | container | drawings/container/stackable-box.scad | previews/container/stackable-box.png |

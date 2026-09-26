@@ -22,3 +22,4 @@
 | BOSL2 transforms need children, not argument-attached geometry; true tapers need stacked hulls | warning | medium | openscad, bosl2, transforms, syntax, taper |  | archive/2026-09-13-bosl2-transform-children.md |
 | Module braces, region booleans, chained offsets vs CGAL | warning | high | openscad, bosl2, modules, regions, cgal, offsets |  | archive/2026-09-13-openscad-cgal-footguns.md |
 | Continuous container cavity shrinks seat-band wall | decision | medium | openscad, container, cavity, neck, parametrization |  | archive/2026-09-15-continuous-cavity.md |
+| Builtin 45-degree chamfer cuts via exact-hypotenuse prisms | pattern | medium | openscad, chamfer, csg, print-quality |  | archive/2026-09-26-builtin-chamfer-cut.md |

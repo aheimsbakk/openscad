@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.9.0] - 2026-09-26
+
+- **why:** Show how the two trivet halves fit together and make the drawing easy to tune in the Customizer
+- **model:** openrouter/z-ai/glm-5.3-flash
+- **tags:** frames, pot-stand, ghost-preview, customizer
+
+### Added
+
+- `drawings/frames/pot-stand.scad`: two-piece slot-together pot stand (trivet); each half is a U-bracket with a half-width center slot, both slot variants drawn side by side
+- `$preview`-guarded `show_ghosts` ghost view: fast previews add a translucent ghost of the assembled pose beside the printed parts; full renders and STL exports stay solid
+- Customizer slider ranges for all parameters, pot diameter capped at 250 mm; derived `bar_length`, `slot_width`, and `slot_depth` hidden from the panel
+- `previews/frames/pot-stand.png` regenerated fast preview
+
 ## [0.8.3] - 2026-09-15
 
 - **why:** The porridge box must slide through the full inner space, so the seat-band ledge had to go
