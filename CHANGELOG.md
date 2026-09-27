@@ -1,7 +1,5 @@
 # Changelog
 
-## [0.10.2] - 2026-09-27
-
 ## [0.10.2] - 2026-09-26
 
 - **why:** Print a sensibly sized default stand and seat the ghost pot correctly between the crossing bars
