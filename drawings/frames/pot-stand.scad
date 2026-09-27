@@ -190,15 +190,23 @@ module pot_stand() {
     translate([0, foot_length + part_gap, 0])
         slotted_bracket(false);
 
-    if ($preview && show_ghosts)
-        translate([0, -part_gap, 0]) {
+    if ($preview && show_ghosts) {
+        translate([0, -part_gap, 0])
             ghost_assembly();
 
-            // Ghost pot in the final assembled frame: centered on the
-            // crossing bars, base on the stand top at foot_length height.
-            translate([bar_length / 2, -bar_length / 2 - (member_thickness + member_width) / 2 + 6, foot_length])
-                ghost_pot();
-        }
+        // Ghost pot in the final assembled frame. The axis must pass
+        // through the crossing half's bar midpoint: on x that is the
+        // first half's bar center; on y the crossing half's bar
+        // midpoint sits slot_width/2 behind the layout origin, and the
+        // whole ghost is offset by foot_length and part_gap. The
+        // bar_length terms cancel, so the pot follows the crossing
+        // when any size changes. The base sits on the stand top at
+        // foot_length height.
+        translate([bar_length / 2,
+                   -foot_length - slot_width / 2 - part_gap,
+                   foot_length])
+            ghost_pot();
+    }
 }
 
 // ================= INSTANTIATION =================

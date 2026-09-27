@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.10.3] - 2026-09-27
+
+- **why:** The 0.10.2 pot placement formula used the wrong anchor, so the ghost pot drifted off the crossing when leg length or part gap changed
+- **model:** openrouter/z-ai/glm-5.3-flash
+- **tags:** frames, pot-stand, ghost-pot, parametrization
+
+### Fixed
+
+- Ghost pot axis in `drawings/frames/pot-stand.scad` now derives from the crossing half's bar midpoint: `y = -(foot_length + slot_width/2 + part_gap)`, instead of `-bar_length/2`; the pot follows the crossing when any size changes
+- Regenerated `previews/frames/pot-stand.png`
+
 ## [0.10.2] - 2026-09-26
 
 - **why:** Print a sensibly sized default stand and seat the ghost pot correctly between the crossing bars

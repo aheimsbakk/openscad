@@ -24,3 +24,4 @@
 | Continuous container cavity shrinks seat-band wall | decision | medium | openscad, container, cavity, neck, parametrization |  | archive/2026-09-15-continuous-cavity.md |
 | Builtin 45-degree chamfer cuts via exact-hypotenuse prisms | pattern | medium | openscad, chamfer, csg, print-quality |  | archive/2026-09-26-builtin-chamfer-cut.md |
 | Stand-up transforms: flat y=0 spine edge becomes the assembled top | pattern | medium | openscad, transforms, orientation, ghost, preview |  | archive/2026-09-26-stand-up-transform-orientation.md |
+| Ghost pot placement must derive from the crossing half's bar midpoint | pattern | medium | openscad, ghost, preview, transforms, parametrization |  | archive/2026-09-27-ghost-pot-crossing-axis.md |
