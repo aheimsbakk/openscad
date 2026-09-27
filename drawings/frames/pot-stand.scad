@@ -21,26 +21,26 @@
 // ================= PARAMETERS =================
 /* [Bracket members] */
 // Width of every member, in the part's plane
-member_width = 40; // [10:1:100]
+member_width = 30; // [10:1:100]
 // Extrusion thickness of the part
-member_thickness = 20; // [5:1:50]
+member_thickness = 15; // [5:1:50]
 
 /* [Pot size] */
 // Pot diameter the stand is sized for, up to a 25 cm pot, as the inner
 // width between the support walls
-pot_diameter = 200; // [100:5:250]
+pot_diameter = 150; // [100:5:250]
 // Length of each of the two feet
 foot_length = 100; // [50:5:200]
 
 /* [Pot support] */
 // Height of each support wall above the stand top
-support_height = 20; // [0:1:100]
+support_height = 15; // [0:1:100]
 // Lean of each support wall away from the stand center, matching pots
 // that widen toward the top
 support_angle = 5; // [0:1:45]
 // Width of each support wall and bar extension per side; keep at most
 // the member width
-support_width = 10; // [5:0.5:100]
+support_width = 15; // [5:0.5:100]
 
 /* [Center slot] */
 // Slide-fit gap added to the mating half's thickness
@@ -196,7 +196,7 @@ module pot_stand() {
 
             // Ghost pot in the final assembled frame: centered on the
             // crossing bars, base on the stand top at foot_length height.
-            translate([bar_length / 2, -bar_length / 2 + support_width / 2 , foot_length])
+            translate([bar_length / 2, -bar_length / 2 - (member_thickness + member_width) / 2 + 6, foot_length])
                 ghost_pot();
         }
 }

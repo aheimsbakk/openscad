@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.10.2] - 2026-09-27
+
+## [0.10.2] - 2026-09-26
+
+- **why:** Print a sensibly sized default stand and seat the ghost pot correctly between the crossing bars
+- **model:** openrouter/z-ai/glm-5.3-flash
+- **tags:** frames, pot-stand, ghost-pot, defaults
+
+### Changed
+
+- Default parameters reduced: `member_width` 30, `member_thickness` 15, `pot_diameter` 150, `support_height` 15, `support_width` 15
+- Regenerated `previews/frames/pot-stand.png`
+
+### Fixed
+
+- Ghost pot placement in `drawings/frames/pot-stand.scad`: the pot now sits centered between the crossing bars at the stand top
+
 ## [0.10.1] - 2026-09-26
 
 - **why:** Keep the memory system truthful: three entries described code that has since changed
