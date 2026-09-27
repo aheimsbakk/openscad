@@ -12,3 +12,6 @@ venv/
 .handoff/
 tmp/
 drawings/**/*.json
+
+# Temporary debug renders
+dbg-*.png

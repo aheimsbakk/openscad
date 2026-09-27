@@ -15,7 +15,8 @@
 │   └── frames/                    # category: frames
 │       ├── pot-stand.scad         # two-piece slot-together pot stand with leaning pot-support walls
 │       ├── rod-cage.scad          # interlocking rod-based enclosure frame
-│       └── skadis-generator.scad  # Skadis pegboard generator plate
+│       ├── skadis-generator.scad  # Skadis pegboard generator plate
+│       └── tripod-pot-stand.scad  # single-piece reciprocal tripod pot stand with contoured or flat support walls
 ├── previews/                      # Generated preview PNGs (mirrors drawings/)
 │   ├── audio/
 │   │   └── phone-horn.png
@@ -28,7 +29,8 @@
 │   └── frames/
 │       ├── pot-stand.png
 │       ├── rod-cage.png
-│       └── skadis-generator.png
+│       ├── skadis-generator.png
+│       └── tripod-pot-stand.png
 ├── scripts/                       # Build and utility scripts
 │   ├── render-one.sh              # Blueprint component: Render Script (single)
 │   ├── render-all.sh              # Blueprint component: Render Script (batch)
@@ -91,3 +93,4 @@
 | Stackable Box | container | drawings/container/stackable-box.scad | previews/container/stackable-box.png |
 | Travel Porridge Container | container | drawings/container/travel-porage-container.scad | previews/container/travel-porage-container.png |
 | Travel Porridge Container Lid (show=lid) | container | drawings/container/travel-porage-container.scad | previews/container/travel-porage-lid.png |
+| Tripod Pot Stand | frames | drawings/frames/tripod-pot-stand.scad | previews/frames/tripod-pot-stand.png |

@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.11.0] - 2026-09-27
+
+- **why:** Add a single-piece tripod pot stand: one printable leg that arrays into a 3 to 5 leg reciprocal stand
+- **model:** openrouter/z-ai/glm-5.3-flash
+- **tags:** frames, pot-stand, tripod, reciprocal-frame, parametrization
+
+### Added
+
+- `drawings/frames/tripod-pot-stand.scad`: one flat-printable leg that arrays 3 to 5 times into a reciprocal stand; intersecting slot cutters, an angled tip chop, and an auto-computed hub offset keep a solid bridge between slots
+- `contour_support_face` toggle: curved inner wall for round pots or a flat face for polygonal pots; the ghost pot matches the shape (cylinder or prism with corrected apothem radius)
+- `num_legs`, `slot_clearance`, `min_solid_bridge`, `pot_diameter`, `foot_length`, and support-wall parameters with Customizer slider ranges
+- `$preview`-guarded ghost assembly with translucent pot; full renders and STL exports stay solid
+- `previews/frames/tripod-pot-stand.png` fast preview
+
 ## [0.10.3] - 2026-09-27
 
 - **why:** The 0.10.2 pot placement formula used the wrong anchor, so the ghost pot drifted off the crossing when leg length or part gap changed
