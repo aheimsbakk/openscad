@@ -12,11 +12,13 @@
 │   ├── container/                  # category: container
 │   │   ├── stackable-box.scad     # vase-mode stackable box, lid, slide-in plaque
 │   │   └── travel-porage-container.scad  # vase-mode solid: porridge-box cylinder with side spoon pocket and wrap-around lid
-│   └── frames/                    # category: frames
-│       ├── pot-stand.scad         # two-piece slot-together pot stand with leaning pot-support walls
-│       ├── rod-cage.scad          # interlocking rod-based enclosure frame
-│       ├── skadis-generator.scad  # Skadis pegboard generator plate
-│       └── tripod-pot-stand.scad  # single-piece reciprocal tripod pot stand with contoured or flat support walls
+│   ├── frames/                    # category: frames
+│   │   ├── pot-stand.scad         # two-piece slot-together pot stand with leaning pot-support walls
+│   │   ├── rod-cage.scad          # interlocking rod-based enclosure frame
+│   │   ├── skadis-generator.scad  # Skadis pegboard generator plate
+│   │   └── tripod-pot-stand.scad  # single-piece reciprocal tripod pot stand with contoured or flat support walls
+│   └── hooks/                     # category: hooks
+│       └── skadis-universal-hook.scad # parametric Skadis universal hook, top locking peg and protruding lip
 ├── previews/                      # Generated preview PNGs (mirrors drawings/)
 │   ├── audio/
 │   │   └── phone-horn.png
@@ -26,11 +28,13 @@
 │   │   ├── stackable-box.png
 │   │   ├── travel-porage-container.png
 │   │   └── travel-porage-lid.png
-│   └── frames/
-│       ├── pot-stand.png
-│       ├── rod-cage.png
-│       ├── skadis-generator.png
-│       └── tripod-pot-stand.png
+│   ├── frames/
+│   │   ├── pot-stand.png
+│   │   ├── rod-cage.png
+│   │   ├── skadis-generator.png
+│   │   └── tripod-pot-stand.png
+│   └── hooks/
+│       └── skadis-universal-hook.png
 ├── scripts/                       # Build and utility scripts
 │   ├── render-one.sh              # Blueprint component: Render Script (single)
 │   ├── render-all.sh              # Blueprint component: Render Script (batch)
@@ -94,3 +98,4 @@
 | Travel Porridge Container | container | drawings/container/travel-porage-container.scad | previews/container/travel-porage-container.png |
 | Travel Porridge Container Lid (show=lid) | container | drawings/container/travel-porage-container.scad | previews/container/travel-porage-lid.png |
 | Tripod Pot Stand | frames | drawings/frames/tripod-pot-stand.scad | previews/frames/tripod-pot-stand.png |
+| Skadis Universal Hook | hooks | drawings/hooks/skadis-universal-hook.scad | previews/hooks/skadis-universal-hook.png |
