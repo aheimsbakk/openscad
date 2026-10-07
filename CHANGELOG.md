@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.12.0] - 2026-10-07
+
+- **why:** Recreate the SKADIS universal hook from the reference STEP file as a parametric drawing so the fit can be adjusted
+- **model:** kompis/qwen3.8-flash-next-iq3_s
+- **tags:** hooks, skadis, hook, parametrization
+
+### Added
+
+- `drawings/hooks/skadis-universal-hook.scad`: parametric hook built from five 2D sections (top locking peg, through-board segment, spine, protruding hook, retaining lip) extruded 4.5 mm; builtin-only, sharp corners
+- Fit parameters with Customizer groups: `board_thickness`, `hole_clearance`, `part_thickness`, `spine_height`, `locking_peg_height`, `protrusion_depth`, `hook_lip_height`, `hook_vertical_offset`
+- `previews/hooks/skadis-universal-hook.png` full-geometry preview (`FULL=1`)
+- `docs/Hook_-_No_Filets.step`: reference STEP file of the original universal hook
+
 ## [0.11.0] - 2026-09-27
 
 - **why:** Add a single-piece tripod pot stand: one printable leg that arrays into a 3 to 5 leg reciprocal stand

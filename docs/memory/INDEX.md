@@ -25,3 +25,4 @@
 | Builtin 45-degree chamfer cuts via exact-hypotenuse prisms | pattern | medium | openscad, chamfer, csg, print-quality |  | archive/2026-09-26-builtin-chamfer-cut.md |
 | Stand-up transforms: flat y=0 spine edge becomes the assembled top | pattern | medium | openscad, transforms, orientation, ghost, preview |  | archive/2026-09-26-stand-up-transform-orientation.md |
 | Ghost pot placement must derive from the crossing half's bar midpoint | pattern | medium | openscad, ghost, preview, transforms, parametrization |  | archive/2026-09-27-ghost-pot-crossing-axis.md |
+| Skadis universal hook: user-authored parametric version is the finished product | decision | medium | openscad, skadis, hook, parametrization |  | archive/2026-10-07-skadis-universal-hook-user-version.md |
